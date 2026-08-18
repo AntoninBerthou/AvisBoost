@@ -180,8 +180,9 @@
   .field input:focus{ outline: 2px solid var(--sys-blue); }
   .field-row{ display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr); gap: 8px; }
   .field-row .field{ min-width: 0; }
-  .field-row .field input{ width: 100%; min-width: 0; padding-left: 8px; padding-right: 8px; }
+  .field-row .field input{ width: 100%; min-width: 0; padding-left: 8px; padding-right: 8px; min-height: 44px; box-sizing: border-box; }
   .field-row .field input[type="date"]{ font-size: 13px; padding-left: 6px; padding-right: 2px; }
+  .field-row .field input[type="text"]{ -webkit-appearance: none; appearance: none; }
 
   .sheet-actions{ display:flex; gap: 10px; margin-top: 18px; }
   .btn{
@@ -320,7 +321,7 @@
       </div>
       <div class="field">
         <label>Réf.</label>
-        <input type="text" id="fRef" placeholder="NTAG213">
+        <input type="text" id="fRef" placeholder="NTAG213" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
       </div>
     </div>
     <div class="sheet-actions">
