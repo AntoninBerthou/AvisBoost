@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>AvisBoost</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AvisBoost">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#F2F2F7">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAD+klEQVR4nO3dvXHbSByHYenG8VVxHShzBw7cihLX4UStKHAV7uCKuUA3mjsSPxDEx38Xy+dJTYAY7ItdEOTIz39+fX2CKX+0PgD6JQ4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgfR38DXOxjPfjZ9AAAAAElFTkSuQmCC">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+  :root{
+    --sys-blue: #007AFF;
+    --sys-blue-dark: #0062CC;
+    --sys-red: #FF3B30;
+    --sys-green: #34C759;
+    --sys-orange: #FF9500;
+    --bg: #F2F2F7;
+    --card-bg: #FFFFFF;
+    --separator: #E5E5EA;
+    --label: #1C1C1E;
+    --label-secondary: #8A8A8E;
+    --label-tertiary: #C7C7CC;
+    --fill-secondary: rgba(120,120,128,0.12);
+    --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent; }
+  html, body{ height:100%; overscroll-behavior-y: none; }
+
+  body{
+    background: var(--bg);
+    color: var(--label);
+    font-family: var(--font-ui);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button, input, select{ font-family: var(--font-ui); }
+  button{ -webkit-appearance:none; appearance:none; }
+
+  .app{ display:flex; flex-direction:column; height:100vh; height:100dvh; }
+
+  /* ---------- TOPBAR ---------- */
+  .topbar{
+    padding: calc(14px + env(safe-area-inset-top)) 18px 14px;
+    display:flex; align-items:center; justify-content:space-between;
+    background: rgba(242,242,247,0.86);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    position: sticky; top:0; z-index: 20;
+  }
+  .topbar-title{ font-size: 28px; font-weight:700; letter-spacing:-0.4px; }
+  .topbar-actions{ display:flex; gap: 8px; }
+  .icon-circle{
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--fill-secondary); border:none; color: var(--sys-blue);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition: transform 0.1s;
+  }
+  .icon-circle:active{ transform: scale(0.9); }
+  .icon-circle svg{ width:16px; height:16px; }
+
+  /* ---------- CONTENT ---------- */
+  .content{ flex:1; overflow-y:auto; -webkit-overflow-scrolling: touch; padding: 4px 16px calc(110px + env(safe-area-inset-bottom)); }
+  .screen{ display:none; }
+  .screen.active{ display:block; animation: fadein 0.22s ease; }
+  @keyframes fadein{ from{ opacity:0; transform: translateY(6px);} to{ opacity:1; transform:translateY(0);} }
+
+  /* ---------- SORT ICON + GROUP HEADER ---------- */
+  .group-label{
+    font-size: 12.5px; font-weight:600; color: var(--label-secondary);
+    text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  .group-header{ display:flex; align-items:center; justify-content:space-between; margin: 20px 4px 8px; }
+  .group-header .group-label{ margin:0; }
+  .count-badge{
+    font-family: var(--font-mono); font-weight:600; color: var(--label-tertiary);
+    text-transform:none; letter-spacing:0; font-size: 11.5px; margin-left: 2px;
+  }
+  .count-badge.warn{ color: var(--sys-orange); }
+  .sort-icon-btn{
+    width: 30px; height: 30px; border-radius: 50%; background: var(--fill-secondary);
+    border:none; color: var(--sys-blue); display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition: transform 0.1s;
+  }
+  .sort-icon-btn:active{ transform: scale(0.9); }
+  .sort-icon-btn svg{ width:15px; height:15px; }
+  .sort-option{ cursor:pointer; }
+  .sort-option .row-chevron{ color: var(--sys-blue); font-size: 17px; font-weight:700; }
+  .group{ background: var(--card-bg); border-radius: 14px; overflow:hidden; box-shadow: 0 1px 1px rgba(0,0,0,0.02); }
+
+  .row{
+    display:flex; align-items:center; gap: 10px; padding: 12px 14px;
+    border-bottom: 0.5px solid var(--separator); cursor:pointer;
+    transition: background 0.1s;
+  }
+  .row:last-child{ border-bottom:none; }
+  .row:active{ background: var(--bg); }
+  .row-dot{ width:8px; height:8px; border-radius:50%; background: var(--sys-green); flex-shrink:0; }
+  .row-dot.missing{ background: var(--sys-orange); }
+  .row-dot.inactive{ background: var(--label-tertiary); }
+  .row-main{ flex:1; min-width:0; }
+  .row-title{ font-size: 15px; font-weight:600; color: var(--label); }
+  .row-title.company-name{ text-transform: uppercase; letter-spacing: 0.2px; }
+  .row-title.inactive-text{ color: var(--label-secondary); text-decoration: line-through; text-decoration-color: var(--label-tertiary); }
+  .row-sub{ font-size: 12.5px; color: var(--label-secondary); margin-top: 2px; display:flex; gap:6px; flex-wrap:wrap; }
+  .row-sub .tag{ background: var(--fill-secondary); border-radius: 5px; padding: 1px 6px; font-family: var(--font-mono); font-size:11px; }
+  .row-price{ font-family: var(--font-mono); font-weight:600; font-size: 14px; color: var(--label); white-space:nowrap; }
+  .row-chevron{ color: var(--label-tertiary); font-size: 15px; flex-shrink:0; }
+
+  .empty-state{
+    text-align:center; padding: 50px 24px; color: var(--label-secondary);
+  }
+  .empty-state .em-title{ font-size: 15px; font-weight:600; color: var(--label); margin-bottom: 6px; }
+  .empty-state .em-sub{ font-size: 13px; line-height:1.5; }
+
+  /* ---------- STAT CARDS (finances) ---------- */
+  .stats-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0 6px; }
+  .stat-card{ background: var(--card-bg); border-radius: 14px; padding: 14px; }
+  .stat-card.full{ grid-column: 1/-1; background: linear-gradient(135deg, var(--sys-blue), var(--sys-blue-dark)); }
+  .stat-label{ font-size: 11.5px; font-weight:600; color: var(--label-secondary); text-transform:uppercase; letter-spacing:0.3px; }
+  .stat-card.full .stat-label{ color: rgba(255,255,255,0.75); }
+  .stat-value{ font-family: var(--font-mono); font-size: 21px; font-weight:600; color: var(--label); margin-top: 4px; }
+  .stat-card.full .stat-value{ color:#fff; font-size: 26px; }
+  .stat-value.neg{ color: var(--sys-red); }
+  .stat-card.full .stat-value.neg{ color: #FFD4D0; }
+
+  /* ---------- FAB ---------- */
+  .fab{
+    position: fixed; right: 20px; bottom: calc(96px + env(safe-area-inset-bottom));
+    width: 56px; height: 56px; border-radius: 50%; background: var(--sys-blue); color:#fff;
+    border:none; font-size: 28px; font-weight:400; display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 6px 16px rgba(0,122,255,0.4); z-index: 25; cursor:pointer; transition: transform 0.12s;
+    line-height: 1;
+  }
+  .fab:active{ transform: scale(0.92); }
+
+  /* ---------- TAB BAR ---------- */
+  .tabbar{
+    position: fixed; left:0; right:0; bottom:0; display:flex;
+    background: rgba(249,249,251,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-top: 0.5px solid var(--separator); padding: 8px 0 calc(6px + env(safe-area-inset-bottom));
+    z-index: 22;
+  }
+  .tab-item{
+    flex:1; background:none; border:none; display:flex; flex-direction:column; align-items:center; gap: 3px;
+    color: var(--label-tertiary); cursor:pointer; padding: 4px 0;
+  }
+  .tab-item svg{ width:24px; height:24px; }
+  .tab-item span{ font-size: 10.5px; font-weight:600; }
+  .tab-item.active{ color: var(--sys-blue); }
+
+  /* ---------- SHEETS ---------- */
+  .sheet-overlay{
+    position: fixed; inset:0; background: rgba(0,0,0,0.4); opacity:0; pointer-events:none;
+    transition: opacity 0.25s; z-index: 30;
+  }
+  .sheet-overlay.show{ opacity:1; pointer-events:auto; }
+
+  .sheet{
+    position: fixed; left:0; right:0; bottom:0; background: var(--bg);
+    border-radius: 20px 20px 0 0; padding: 10px 18px calc(24px + env(safe-area-inset-bottom));
+    transform: translateY(100%); transition: transform 0.3s cubic-bezier(.32,.72,0,1);
+    z-index: 31; max-height: 86vh; overflow-y:auto;
+  }
+  .sheet.show{ transform: translateY(0); }
+  .sheet-handle{ width: 36px; height: 5px; background: var(--label-tertiary); border-radius: 3px; margin: 4px auto 14px; }
+  .sheet-title{ font-size: 19px; font-weight:700; margin-bottom: 16px; }
+
+  .field{ margin-bottom: 10px; }
+  .field label{ display:block; font-size: 12px; font-weight:600; color: var(--label-secondary); margin-bottom: 5px; }
+  .field input{
+    width:100%; background: var(--card-bg); border: none; color: var(--label);
+    padding: 12px 13px; border-radius: 10px; font-size: 15px; font-family: var(--font-ui);
+  }
+  .field input:focus{ outline: 2px solid var(--sys-blue); }
+  .field-row{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+  .sheet-actions{ display:flex; gap: 10px; margin-top: 18px; }
+  .btn{
+    flex:1; border:none; padding: 13px; border-radius: 12px; font-size: 15px; font-weight:600;
+    cursor:pointer; transition: transform 0.1s;
+  }
+  .btn:active{ transform: scale(0.97); }
+  .btn-primary{ background: var(--sys-blue); color:#fff; }
+  .btn-secondary{ background: var(--fill-secondary); color: var(--label); }
+  .btn-destructive{ background: rgba(255,59,48,0.12); color: var(--sys-red); }
+  .btn-full{ width:100%; }
+
+  .link-preview{
+    background: var(--card-bg); border-radius: 10px; padding: 11px 13px; font-family: var(--font-mono);
+    font-size: 12.5px; color: var(--sys-blue); word-break: break-all; margin: 6px 0 12px; min-height: 18px;
+  }
+  .link-preview.empty{ color: var(--label-tertiary); font-style:italic; font-family: var(--font-ui); }
+
+  /* ---------- TOAST ---------- */
+  .toast{
+    position: fixed; left:50%; bottom: calc(96px + env(safe-area-inset-bottom));
+    transform: translate(-50%, 20px); background: rgba(28,28,30,0.92); color:#fff;
+    padding: 11px 20px; border-radius: 100px; font-size: 13.5px; font-weight:600;
+    opacity:0; pointer-events:none; transition: all 0.25s; z-index: 40; white-space:nowrap;
+  }
+  .toast.show{ opacity:1; transform: translate(-50%, 0); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="topbar-title">AvisBoost</div>
+    <div class="topbar-actions">
+      <button class="icon-circle" id="exportBtn" title="Exporter">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </button>
+      <button class="icon-circle" id="importBtn" title="Importer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </button>
+      <input type="file" id="importFile" accept="application/json" hidden>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <!-- REGISTRE -->
+    <section class="screen active" id="screen-registre">
+      <div class="group-header">
+        <div class="group-label">Cartes enregistrées <span class="count-badge" id="cardsCountBadge"></span></div>
+        <button class="sort-icon-btn" id="cardsSortBtn" title="Trier">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+        </button>
+      </div>
+      <div class="group" id="cardsList"></div>
+    </section>
+
+    <!-- FINANCES -->
+    <section class="screen" id="screen-finances">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Dépensé</div>
+          <div class="stat-value" id="statCost">0 €</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Encaissé</div>
+          <div class="stat-value" id="statRevenue">0 €</div>
+        </div>
+        <div class="stat-card full">
+          <div class="stat-label">Bénéfice net</div>
+          <div class="stat-value" id="statProfit">0 €</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Cartes commandées</div>
+          <div class="stat-value" id="statOrderedCount">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Cartes vendues</div>
+          <div class="stat-value" id="statSoldCount">0</div>
+        </div>
+      </div>
+
+      <div class="group-header">
+        <div class="group-label">Historique des commandes</div>
+        <button class="sort-icon-btn" id="ordersSortBtn" title="Trier">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+        </button>
+      </div>
+      <div class="group" id="orderList"></div>
+
+      <div class="group-header">
+        <div class="group-label">Détail des ventes</div>
+        <button class="sort-icon-btn" id="salesSortBtn" title="Trier">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+        </button>
+      </div>
+      <div class="group" id="salesList"></div>
+    </section>
+
+  </main>
+
+  <button class="fab" id="fabBtn">+</button>
+
+  <nav class="tabbar">
+    <button class="tab-item active" data-view="registre">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5" fill="currentColor"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      <span>Registre</span>
+    </button>
+    <button class="tab-item" data-view="finances">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
+      <span>Finances</span>
+    </button>
+  </nav>
+
+  <!-- SHEET: card add/edit -->
+  <div class="sheet-overlay" id="sheetOverlay"></div>
+  <div class="sheet" id="cardSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title company-name" id="cardSheetTitle">Nouvelle carte</div>
+    <div class="field">
+      <label>Client / commerce</label>
+      <input type="text" id="fName" placeholder="ex. Salon DVS Studio">
+    </div>
+    <div class="field">
+      <label>Lien programmé sur la puce</label>
+      <input type="text" id="fLink" placeholder="https://g.page/r/...">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Prix (€)</label>
+        <input type="text" id="fPrice" placeholder="20">
+      </div>
+      <div class="field">
+        <label>Date</label>
+        <input type="date" id="fDate">
+      </div>
+      <div class="field">
+        <label>Réf.</label>
+        <input type="text" id="fRef" placeholder="NTAG213">
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-secondary" id="cardToggleBtn">Marquer inactive</button>
+      <button class="btn btn-destructive" id="cardDeleteBtn">Supprimer</button>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-secondary btn-full" id="cardCancelBtn">Annuler</button>
+      <button class="btn btn-primary btn-full" id="cardSaveBtn">Enregistrer</button>
+    </div>
+  </div>
+
+  <!-- SHEET: order add -->
+  <div class="sheet" id="orderSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Nouvelle commande de cartes</div>
+    <div class="field-row">
+      <div class="field">
+        <label>Date</label>
+        <input type="date" id="oDate">
+      </div>
+      <div class="field">
+        <label>Montant (€)</label>
+        <input type="text" id="oAmount" placeholder="45">
+      </div>
+      <div class="field">
+        <label>Nb cartes</label>
+        <input type="text" id="oQty" placeholder="15">
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-secondary btn-full" id="orderCancelBtn">Annuler</button>
+      <button class="btn btn-primary btn-full" id="orderSaveBtn">Enregistrer</button>
+    </div>
+  </div>
+
+  <!-- SHEET: sort options -->
+  <div class="sheet" id="sortSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Trier par</div>
+    <div class="group" id="sortOptionsList"></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+</div>
+
+<script>
+const CARDS_KEY = 'avisboost_cards';
+const ORDERS_KEY = 'avisboost_orders';
+let cards = [];
+let orders = [];
+let activeView = 'registre';
+let editingCardId = null;
+
+let cardSort = 'date-desc';
+let orderSort = 'date-desc';
+let salesSort = 'date-desc';
+
+const SEED_CARDS = [
+  { name: 'Roxy Brasserie Lounge', order: 0 },
+  { name: 'Au moment de partage', order: 1 }
+];
+
+function genId(prefix){ return prefix + Date.now() + Math.floor(Math.random()*1000); }
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+function toNum(v){ const n = parseFloat((v||'').toString().replace(',', '.')); return isNaN(n) ? 0 : n; }
+function escapeHtml(str){ const div = document.createElement('div'); div.textContent = str || ''; return div.innerHTML; }
+function fmtDate(d){
+  if(!d) return '';
+  const dt = new Date(d + 'T00:00:00');
+  if(isNaN(dt)) return d;
+  const now = new Date();
+  const opts = dt.getFullYear() === now.getFullYear() ? { day:'numeric', month:'short' } : { day:'numeric', month:'short', year:'numeric' };
+  return dt.toLocaleDateString('fr-FR', opts);
+}
+
+/* ---------- STORAGE ---------- */
+function loadCards(){
+  try{
+    const raw = localStorage.getItem(CARDS_KEY);
+    if(!raw){
+      cards = SEED_CARDS.map(seed => ({
+        id: genId('c'), name: seed.name, link: '', price: '', ref: '', date: '',
+        active: true, order: seed.order, createdAt: Date.now() + seed.order
+      }));
+      persistCards();
+      return;
+    }
+    cards = JSON.parse(raw);
+  }catch(e){ cards = []; }
+}
+function loadOrders(){
+  try{
+    const raw = localStorage.getItem(ORDERS_KEY);
+    orders = raw ? JSON.parse(raw) : [];
+  }catch(e){ orders = []; }
+}
+function persistCards(){ try{ localStorage.setItem(CARDS_KEY, JSON.stringify(cards)); return true; }catch(e){ return false; } }
+function persistOrders(){ try{ localStorage.setItem(ORDERS_KEY, JSON.stringify(orders)); return true; }catch(e){ return false; } }
+
+/* ---------- SORT HELPERS ---------- */
+function sortCardsFor(list, mode){
+  const arr = [...list];
+  switch(mode){
+    case 'date-desc': return arr.sort((a,b) => (b.date||'').localeCompare(a.date||''));
+    case 'date-asc': return arr.sort((a,b) => (a.date||'').localeCompare(b.date||''));
+    case 'price-desc': return arr.sort((a,b) => toNum(b.price) - toNum(a.price));
+    case 'price-asc': return arr.sort((a,b) => toNum(a.price) - toNum(b.price));
+    default: return arr.sort((a,b) => (a.order ?? 999999) - (b.order ?? 999999) || (a.createdAt||0) - (b.createdAt||0));
+  }
+}
+function sortOrdersFor(list, mode){
+  const arr = [...list];
+  switch(mode){
+    case 'date-asc': return arr.sort((a,b) => (a.date||'').localeCompare(b.date||''));
+    case 'amount-desc': return arr.sort((a,b) => toNum(b.amount) - toNum(a.amount));
+    case 'amount-asc': return arr.sort((a,b) => toNum(a.amount) - toNum(b.amount));
+    default: return arr.sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  }
+}
+function sortSalesFor(list, mode){
+  const arr = [...list];
+  switch(mode){
+    case 'date-asc': return arr.sort((a,b) => (a.date||'').localeCompare(b.date||''));
+    case 'price-desc': return arr.sort((a,b) => toNum(b.price) - toNum(a.price));
+    case 'price-asc': return arr.sort((a,b) => toNum(a.price) - toNum(b.price));
+    default: return arr.sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  }
+}
+
+/* ---------- TOAST ---------- */
+let toastTimer = null;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+/* ---------- TAB NAV ---------- */
+document.querySelectorAll('.tab-item').forEach(tab => {
+  tab.addEventListener('click', () => {
+    activeView = tab.dataset.view;
+    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('screen-' + activeView).classList.add('active');
+    if(activeView === 'finances') renderFinances();
+  });
+});
+
+/* ---------- SORT MENU ---------- */
+const SORT_OPTIONS = {
+  cards: [
+    { value: 'date-desc', label: 'Plus récent → plus ancien' },
+    { value: 'date-asc', label: 'Plus ancien → plus récent' },
+    { value: 'price-desc', label: 'Prix : cher → pas cher' },
+    { value: 'price-asc', label: 'Prix : pas cher → cher' },
+    { value: 'default', label: "Ordre d'ajout" }
+  ],
+  orders: [
+    { value: 'date-desc', label: 'Plus récent → plus ancien' },
+    { value: 'date-asc', label: 'Plus ancien → plus récent' },
+    { value: 'amount-desc', label: 'Montant : cher → pas cher' },
+    { value: 'amount-asc', label: 'Montant : pas cher → cher' }
+  ],
+  sales: [
+    { value: 'date-desc', label: 'Plus récent → plus ancien' },
+    { value: 'date-asc', label: 'Plus ancien → plus récent' },
+    { value: 'price-desc', label: 'Prix : cher → pas cher' },
+    { value: 'price-asc', label: 'Prix : pas cher → cher' }
+  ]
+};
+
+function openSortSheet(type){
+  const opts = SORT_OPTIONS[type];
+  const current = type === 'cards' ? cardSort : type === 'orders' ? orderSort : salesSort;
+  const list = document.getElementById('sortOptionsList');
+  list.innerHTML = opts.map(o => `
+    <div class="row sort-option" data-value="${o.value}">
+      <div class="row-main"><div class="row-title">${o.label}</div></div>
+      ${o.value === current ? '<div class="row-chevron">✓</div>' : ''}
+    </div>
+  `).join('');
+  list.querySelectorAll('.sort-option').forEach(el => {
+    el.addEventListener('click', () => {
+      const v = el.dataset.value;
+      if(type === 'cards'){ cardSort = v; renderCards(); }
+      else if(type === 'orders'){ orderSort = v; renderFinances(); }
+      else { salesSort = v; renderFinances(); }
+      closeSheets();
+    });
+  });
+  openSheet(document.getElementById('sortSheet'));
+}
+
+document.getElementById('cardsSortBtn').addEventListener('click', () => openSortSheet('cards'));
+document.getElementById('ordersSortBtn').addEventListener('click', () => openSortSheet('orders'));
+document.getElementById('salesSortBtn').addEventListener('click', () => openSortSheet('sales'));
+
+/* ---------- RENDER: CARDS ---------- */
+function renderCards(){
+  const list = document.getElementById('cardsList');
+
+  const totalOrdered = orders.reduce((sum, o) => sum + toNum(o.qty), 0);
+  const badge = document.getElementById('cardsCountBadge');
+  if(totalOrdered > 0){
+    const remaining = totalOrdered - cards.length;
+    badge.textContent = `${cards.length}/${totalOrdered}`;
+    badge.classList.toggle('warn', remaining <= 2);
+    badge.title = remaining >= 0 ? `${remaining} restante${remaining > 1 ? 's' : ''} à vendre` : 'Plus de cartes enregistrées que commandées';
+  } else {
+    badge.textContent = '';
+  }
+
+  if(cards.length === 0){
+    list.innerHTML = `<div class="empty-state"><div class="em-title">Aucune carte enregistrée</div><div class="em-sub">Appuie sur + pour ajouter ta première carte NFC.</div></div>`;
+    return;
+  }
+  const display = sortCardsFor(cards, cardSort);
+  list.innerHTML = display.map(c => {
+    const missing = !c.link;
+    const dotClass = c.active === false ? 'inactive' : (missing ? 'missing' : '');
+    return `
+      <div class="row" data-id="${c.id}">
+        <div class="row-dot ${dotClass}"></div>
+        <div class="row-main">
+          <div class="row-title company-name ${c.active === false ? 'inactive-text' : ''}">${escapeHtml(c.name || 'Sans nom')}</div>
+          <div class="row-sub">
+            <span>${c.date ? fmtDate(c.date) : (missing ? 'Non configurée' : 'Date non renseignée')}</span>
+            ${c.ref ? `<span class="tag">${escapeHtml(c.ref)}</span>` : ''}
+          </div>
+        </div>
+        ${c.price ? `<div class="row-price">${escapeHtml(c.price)}€</div>` : ''}
+        <div class="row-chevron">›</div>
+      </div>
+    `;
+  }).join('');
+
+  list.querySelectorAll('.row').forEach(row => {
+    row.addEventListener('click', () => openCardSheet(row.dataset.id));
+  });
+}
+
+/* ---------- CARD SHEET ---------- */
+const sheetOverlay = document.getElementById('sheetOverlay');
+const cardSheet = document.getElementById('cardSheet');
+const orderSheet = document.getElementById('orderSheet');
+
+function openSheet(sheetEl){
+  sheetOverlay.classList.add('show');
+  sheetEl.classList.add('show');
+}
+function closeSheets(){
+  sheetOverlay.classList.remove('show');
+  cardSheet.classList.remove('show');
+  orderSheet.classList.remove('show');
+  document.getElementById('sortSheet').classList.remove('show');
+}
+sheetOverlay.addEventListener('click', closeSheets);
+
+function openCardSheet(id){
+  editingCardId = id || null;
+  const card = id ? cards.find(c => c.id === id) : null;
+
+  document.getElementById('cardSheetTitle').textContent = card ? (card.name || 'Modifier la carte') : 'Nouvelle carte';
+  document.getElementById('fName').value = card ? card.name || '' : '';
+  document.getElementById('fLink').value = card ? card.link || '' : '';
+  document.getElementById('fPrice').value = card ? card.price || '' : '';
+  document.getElementById('fDate').value = card ? card.date || '' : '';
+  document.getElementById('fRef').value = card ? card.ref || '' : '';
+
+  const deleteRow = document.getElementById('cardDeleteBtn').parentElement;
+  const toggleBtn = document.getElementById('cardToggleBtn');
+  if(card){
+    deleteRow.style.display = 'flex';
+    toggleBtn.textContent = card.active === false ? 'Réactiver' : 'Marquer inactive';
+  } else {
+    deleteRow.style.display = 'none';
+  }
+
+  openSheet(cardSheet);
+}
+
+document.getElementById('cardCancelBtn').addEventListener('click', closeSheets);
+
+document.getElementById('cardSaveBtn').addEventListener('click', () => {
+  const name = document.getElementById('fName').value.trim();
+  const link = document.getElementById('fLink').value.trim();
+  const price = document.getElementById('fPrice').value.trim();
+  const date = document.getElementById('fDate').value;
+  const ref = document.getElementById('fRef').value.trim();
+
+  if(!name && !link){ showToast('Renseigne au moins un nom ou un lien'); return; }
+
+  if(editingCardId){
+    const card = cards.find(c => c.id === editingCardId);
+    if(card){ card.name = name; card.link = link; card.price = price; card.date = date; card.ref = ref; }
+  } else {
+    const maxOrder = cards.reduce((m, c) => Math.max(m, c.order ?? 0), -1);
+    cards.push({ id: genId('c'), name, link, price, ref, date: date || todayStr(), active: true, order: maxOrder + 1, createdAt: Date.now() });
+  }
+  persistCards();
+  renderCards();
+  closeSheets();
+  showToast('Carte enregistrée');
+});
+
+document.getElementById('cardToggleBtn').addEventListener('click', () => {
+  if(!editingCardId) return;
+  const card = cards.find(c => c.id === editingCardId);
+  if(!card) return;
+  card.active = card.active === false ? true : false;
+  persistCards();
+  renderCards();
+  closeSheets();
+  showToast(card.active === false ? 'Carte marquée inactive' : 'Carte réactivée');
+});
+
+document.getElementById('cardDeleteBtn').addEventListener('click', () => {
+  if(!editingCardId) return;
+  if(!confirm('Supprimer cette carte du registre ?')) return;
+  cards = cards.filter(c => c.id !== editingCardId);
+  persistCards();
+  renderCards();
+  closeSheets();
+  showToast('Carte supprimée');
+});
+
+/* ---------- ORDER SHEET ---------- */
+document.getElementById('orderCancelBtn').addEventListener('click', closeSheets);
+
+document.getElementById('orderSaveBtn').addEventListener('click', () => {
+  const date = document.getElementById('oDate').value || todayStr();
+  const amount = document.getElementById('oAmount').value.trim();
+  const qty = document.getElementById('oQty').value.trim();
+
+  if(!amount && !qty){ showToast('Renseigne un montant ou une quantité'); return; }
+
+  orders.unshift({ id: genId('o'), date, amount, qty, createdAt: Date.now() });
+  persistOrders();
+  renderFinances();
+  renderCards();
+  closeSheets();
+  document.getElementById('oDate').value = '';
+  document.getElementById('oAmount').value = '';
+  document.getElementById('oQty').value = '';
+  showToast('Commande enregistrée');
+});
+
+/* ---------- FAB ---------- */
+document.getElementById('fabBtn').addEventListener('click', () => {
+  if(activeView === 'registre'){
+    document.getElementById('fDate').value = todayStr();
+    openCardSheet(null);
+  } else {
+    document.getElementById('oDate').value = todayStr();
+    openSheet(orderSheet);
+  }
+});
+
+/* ---------- FINANCES RENDER ---------- */
+function renderFinances(){
+  let totalRevenue = 0, soldCount = 0;
+  cards.forEach(c => { if(c.price){ totalRevenue += toNum(c.price); soldCount++; } });
+
+  let totalCost = 0, orderedCount = 0;
+  orders.forEach(o => { totalCost += toNum(o.amount); orderedCount += toNum(o.qty); });
+
+  const profit = totalRevenue - totalCost;
+
+  document.getElementById('statCost').textContent = totalCost.toFixed(2) + ' €';
+  document.getElementById('statRevenue').textContent = totalRevenue.toFixed(2) + ' €';
+  document.getElementById('statOrderedCount').textContent = orderedCount;
+  document.getElementById('statSoldCount').textContent = soldCount;
+  const profitEl = document.getElementById('statProfit');
+  profitEl.textContent = (profit >= 0 ? '+' : '') + profit.toFixed(2) + ' €';
+  profitEl.classList.toggle('neg', profit < 0);
+
+  const orderList = document.getElementById('orderList');
+  if(orders.length === 0){
+    orderList.innerHTML = `<div class="empty-state"><div class="em-title">Aucune commande</div><div class="em-sub">Appuie sur + pour ajouter ta première commande de cartes.</div></div>`;
+  } else {
+    const displayOrders = sortOrdersFor(orders, orderSort);
+    orderList.innerHTML = displayOrders.map(o => `
+      <div class="row" data-id="${o.id}">
+        <div class="row-main">
+          <div class="row-title">${fmtDate(o.date) || 'Date inconnue'}</div>
+          <div class="row-sub"><span>${toNum(o.qty)} carte${toNum(o.qty) > 1 ? 's' : ''} commandée${toNum(o.qty) > 1 ? 's' : ''}</span></div>
+        </div>
+        <div class="row-price">${toNum(o.amount).toFixed(2)}€</div>
+      </div>
+    `).join('');
+    orderList.querySelectorAll('.row').forEach(row => {
+      row.addEventListener('click', () => {
+        const id = row.dataset.id;
+        if(!confirm('Supprimer cette commande ?')) return;
+        orders = orders.filter(o => o.id !== id);
+        persistOrders();
+        renderFinances();
+        renderCards();
+        showToast('Commande supprimée');
+      });
+    });
+  }
+
+  const salesList = document.getElementById('salesList');
+  const sold = cards.filter(c => c.price);
+  if(sold.length === 0){
+    salesList.innerHTML = `<div class="empty-state"><div class="em-title">Aucune vente</div><div class="em-sub">Renseigne un prix sur une carte dans l'onglet Registre.</div></div>`;
+  } else {
+    const displaySales = sortSalesFor(sold, salesSort);
+    salesList.innerHTML = displaySales.map(c => `
+      <div class="row" data-id="${c.id}">
+        <div class="row-main">
+          <div class="row-title company-name">${escapeHtml(c.name || 'Sans nom')}</div>
+          <div class="row-sub"><span>${c.date ? fmtDate(c.date) : 'date non renseignée'}</span></div>
+        </div>
+        <div class="row-price">${toNum(c.price).toFixed(2)}€</div>
+      </div>
+    `).join('');
+    salesList.querySelectorAll('.row').forEach(row => {
+      row.addEventListener('click', () => openCardSheet(row.dataset.id));
+    });
+  }
+}
+
+/* ---------- EXPORT / IMPORT ---------- */
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const data = { cards, orders, exportedAt: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'avisboost-sauvegarde-' + todayStr() + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Sauvegarde téléchargée');
+});
+
+document.getElementById('importBtn').addEventListener('click', () => document.getElementById('importFile').click());
+
+document.getElementById('importFile').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    try{
+      const data = JSON.parse(evt.target.result);
+      if(!confirm('Remplacer les données actuelles par celles du fichier importé ?')) return;
+      cards = Array.isArray(data.cards) ? data.cards : [];
+      orders = Array.isArray(data.orders) ? data.orders : [];
+      persistCards();
+      persistOrders();
+      renderCards();
+      renderFinances();
+      showToast('Import réussi');
+    }catch(err){
+      showToast('Fichier invalide');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+/* ---------- INIT ---------- */
+loadCards();
+loadOrders();
+renderCards();
+</script>
+</body>
+</html>
