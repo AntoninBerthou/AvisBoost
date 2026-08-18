@@ -179,6 +179,9 @@
   }
   .field input:focus{ outline: 2px solid var(--sys-blue); }
   .field-row{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .field-row .field{ min-width: 0; }
+  .field-row .field input{ width: 100%; min-width: 0; padding-left: 8px; padding-right: 8px; }
+  .field-row .field input[type="date"]{ font-size: 13px; padding-left: 6px; padding-right: 2px; }
 
   .sheet-actions{ display:flex; gap: 10px; margin-top: 18px; }
   .btn{
