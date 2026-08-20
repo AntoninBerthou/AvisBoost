@@ -26,8 +26,20 @@
     --label-secondary: #8A8A8E;
     --label-tertiary: #C7C7CC;
     --fill-secondary: rgba(120,120,128,0.12);
+    --topbar-bg: rgba(242,242,247,0.86);
     --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
     --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+    transition: background-color 0.3s;
+  }
+  html.dark{
+    --bg: #000000;
+    --card-bg: #1C1C1E;
+    --separator: #38383A;
+    --label: #F2F2F7;
+    --label-secondary: #98989D;
+    --label-tertiary: #636366;
+    --fill-secondary: rgba(120,120,128,0.24);
+    --topbar-bg: rgba(0,0,0,0.82);
   }
 
   *{ box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent; }
@@ -49,7 +61,7 @@
   .topbar{
     padding: calc(14px + env(safe-area-inset-top)) 18px 14px;
     display:flex; align-items:center; justify-content:space-between;
-    background: rgba(242,242,247,0.86);
+    background: var(--topbar-bg);
     backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     position: sticky; top:0; z-index: 20;
   }
@@ -82,6 +94,8 @@
     text-transform:none; letter-spacing:0; font-size: 11.5px; margin-left: 2px;
   }
   .count-badge.warn{ color: var(--sys-orange); }
+  .count-badge.good{ color: var(--sys-green); }
+  .count-badge.danger{ color: var(--sys-red); }
   .sort-icon-btn{
     width: 30px; height: 30px; border-radius: 50%; background: var(--fill-secondary);
     border:none; color: var(--sys-blue); display:flex; align-items:center; justify-content:center;
@@ -142,7 +156,7 @@
   /* ---------- TAB BAR ---------- */
   .tabbar{
     position: fixed; left:0; right:0; bottom:0; display:flex;
-    background: rgba(249,249,251,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    background: var(--topbar-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     border-top: 0.5px solid var(--separator); padding: 8px 0 calc(6px + env(safe-area-inset-bottom));
     z-index: 22;
   }
@@ -201,6 +215,222 @@
   }
   .link-preview.empty{ color: var(--label-tertiary); font-style:italic; font-family: var(--font-ui); }
 
+  /* ---------- PROSPECTION ---------- */
+  .chip-row{ display:flex; gap:8px; overflow-x:auto; padding: 2px 2px 12px; -webkit-overflow-scrolling:touch; }
+  .chip-row::-webkit-scrollbar{ display:none; }
+  .chip{
+    flex-shrink:0; padding: 7px 14px; border-radius: 100px; background: var(--card-bg);
+    font-size: 13px; font-weight:600; color: var(--label-secondary); border:none; cursor:pointer;
+    transition: all 0.15s;
+  }
+  .chip.active{ background: var(--sys-blue); color:#fff; }
+  .status-dot{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .status-dot.todo{ background: var(--label-tertiary); }
+  .status-dot.yes{ background: var(--sys-green); }
+  .status-dot.no{ background: var(--sys-red); }
+  .status-dot.later{ background: var(--sys-orange); }
+  .status-pill{
+    font-family: var(--font-mono); font-size:10.5px; font-weight:600; padding: 2px 7px; border-radius: 5px;
+  }
+  .status-pill.todo{ background: var(--fill-secondary); color: var(--label-secondary); }
+  .status-pill.yes{ background: rgba(52,199,89,0.14); color: var(--sys-green); }
+  .status-pill.no{ background: rgba(255,59,48,0.12); color: var(--sys-red); }
+  .status-pill.later{ background: rgba(255,149,0,0.14); color: var(--sys-orange); }
+  .status-choice-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin: 4px 0 14px; }
+  .status-choice{
+    border:none; border-radius:12px; padding: 14px 10px; font-size:14px; font-weight:600; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:6px; transition: transform 0.1s;
+    background: var(--card-bg); color: var(--label);
+  }
+  .status-choice:active{ transform: scale(0.96); }
+  .status-choice.selected.todo{ background: var(--fill-secondary); }
+  .status-choice.selected.yes{ background: rgba(52,199,89,0.16); color: #1f8a3d; }
+  .status-choice.selected.no{ background: rgba(255,59,48,0.14); color: var(--sys-red); }
+  .status-choice.selected.later{ background: rgba(255,149,0,0.16); color: #b5680a; }
+  .status-choice .dot{ width:10px; height:10px; border-radius:50%; }
+  .status-choice.todo .dot{ background: var(--label-tertiary); }
+  .status-choice.yes .dot{ background: var(--sys-green); }
+  .status-choice.no .dot{ background: var(--sys-red); }
+  .status-choice.later .dot{ background: var(--sys-orange); }
+
+  .waze-btn{
+    width: 32px; height: 32px; border-radius: 50%; background: rgba(51,199,240,0.14);
+    border:none; color: #33C7F0; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; flex-shrink:0; transition: transform 0.1s;
+  }
+  .waze-btn:active{ transform: scale(0.9); }
+  .waze-btn svg{ width:16px; height:16px; }
+  .sheet-actions .btn-waze{ background: #33C7F0; color:#fff; }
+
+  .sv-btn{
+    width: 32px; height: 32px; border-radius: 50%; background: rgba(52,199,89,0.14);
+    border:none; color: var(--sys-green); display:flex; align-items:center; justify-content:center;
+    cursor:pointer; flex-shrink:0; transition: transform 0.1s;
+  }
+  .sv-btn:active{ transform: scale(0.9); }
+  .sv-btn svg{ width:16px; height:16px; }
+  .btn-streetview{ background: var(--sys-green); color:#fff; }
+
+  .open-badge{ font-size:11px; font-weight:700; }
+  .open-badge.open{ color: var(--sys-green); }
+  .open-badge.closed{ color: var(--sys-red); }
+  .open-badge.unknown{ color: var(--label-tertiary); }
+
+  .hours-table{ background: var(--card-bg); border-radius: 12px; padding: 4px 14px; margin-bottom: 14px; }
+  .hours-row{ display:flex; justify-content:space-between; padding: 8px 0; border-bottom: 0.5px solid var(--separator); font-size: 13.5px; }
+  .hours-row:last-child{ border-bottom:none; }
+  .hours-row.today{ font-weight:700; color: var(--sys-blue); }
+  .hours-row .hd{ color: var(--label-secondary); }
+  .hours-row.today .hd{ color: var(--sys-blue); }
+
+  .prospection-toolbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 4px; }
+  .toolbar-btn{
+    flex: 1 1 calc(50% - 4px); border:none; background: var(--card-bg); color: var(--label); padding: 10px 6px;
+    border-radius: 12px; font-size: 12px; font-weight:600; display:flex; align-items:center;
+    justify-content:center; gap:5px; cursor:pointer; transition: transform 0.1s;
+  }
+  .toolbar-btn:active{ transform: scale(0.97); }
+  .toolbar-btn.active{ background: var(--sys-blue); color:#fff; }
+  .toolbar-btn svg{ width:15px; height:15px; }
+
+  .select-checkbox{
+    width:22px; height:22px; border-radius:50%; border: 2px solid var(--label-tertiary);
+    flex-shrink:0; display:flex; align-items:center; justify-content:center; background:#fff;
+  }
+  .select-checkbox.checked{ background: var(--sys-blue); border-color: var(--sys-blue); color:#fff; font-size:13px; font-weight:700; }
+
+  .selection-bar{
+    position: fixed; left:16px; right:16px; bottom: calc(96px + env(safe-area-inset-bottom));
+    background: rgba(28,28,30,0.94); backdrop-filter: blur(10px); border-radius: 16px; padding: 12px 16px;
+    display:flex; align-items:center; justify-content:space-between; z-index: 24; color:#fff;
+  }
+  .selection-bar span{ font-size: 13.5px; font-weight:600; }
+  .selection-bar button{
+    border:none; background: var(--sys-blue); color:#fff; padding: 9px 16px; border-radius: 10px;
+    font-size: 13px; font-weight:700; cursor:pointer;
+  }
+
+  .tour-chip-row{ display:flex; gap:8px; margin: 4px 0 16px; }
+  .tour-chip{
+    flex:1; border:none; padding: 14px 0; border-radius: 12px; background: var(--card-bg);
+    font-size: 16px; font-weight:700; color: var(--label); cursor:pointer; transition: transform 0.1s;
+  }
+  .tour-chip:active{ transform: scale(0.95); }
+  .tour-info{ font-size: 12.5px; color: var(--label-secondary); line-height:1.5; margin-bottom: 14px; }
+  .tour-stop{
+    display:flex; align-items:center; gap:10px; padding: 12px 14px; border-bottom: 0.5px solid var(--separator);
+  }
+  .tour-stop:last-child{ border-bottom:none; }
+  .tour-num{
+    width: 26px; height:26px; border-radius:50%; background: var(--sys-blue); color:#fff;
+    font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+
+  .open-badge{ font-size:11px; font-weight:700; }
+  .open-badge.open{ color: var(--sys-green); }
+  .open-badge.closed{ color: var(--sys-red); }
+  .open-badge.unknown{ color: var(--label-tertiary); }
+
+  .banner{
+    display:flex; align-items:center; gap:10px; background: rgba(255,149,0,0.13); color:#b5680a;
+    border-radius:12px; padding: 11px 14px; margin-bottom:14px; font-size:13px; font-weight:600;
+    cursor:pointer;
+  }
+  .banner.blue{ background: rgba(0,122,255,0.1); color: var(--sys-blue-dark); }
+  .banner .banner-arrow{ margin-left:auto; opacity:0.6; }
+
+  .theme-section-label{ font-size:12.5px; font-weight:700; color: var(--label-secondary); text-transform:uppercase; letter-spacing:0.3px; margin-bottom:10px; }
+  .accent-swatch-row{ display:flex; flex-wrap:wrap; gap:14px; }
+  .accent-swatch{
+    width:44px; height:44px; border-radius:50%; border:none; cursor:pointer; position:relative;
+    display:flex; align-items:center; justify-content:center; transition: transform 0.15s;
+  }
+  .accent-swatch:active{ transform: scale(0.9); }
+  .accent-swatch.selected::after{
+    content:''; position:absolute; inset:-4px; border-radius:50%; border: 2.5px solid var(--label);
+  }
+  .accent-swatch .check{ color:#fff; font-size:16px; font-weight:800; opacity:0; }
+  .accent-swatch.selected .check{ opacity:1; }
+
+  .goal-card{ background: var(--card-bg); border-radius: 14px; padding: 16px; margin-bottom: 16px; }
+  .goal-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .goal-head .gt{ font-size:14px; font-weight:700; }
+  .goal-head .ge{ font-size:12px; color: var(--sys-blue); font-weight:600; cursor:pointer; }
+  .goal-bar-track{ height:8px; border-radius:100px; background: var(--fill-secondary); overflow:hidden; }
+  .goal-bar-fill{ height:100%; background: var(--sys-blue); border-radius:100px; transition: width 0.3s; }
+  .goal-sub{ font-size:12px; color: var(--label-secondary); margin-top:8px; }
+
+  .hero-card{
+    background: linear-gradient(135deg, #1C1C1E, #2C2C2E); color:#fff; border-radius: 18px;
+    padding: 22px 20px; margin-bottom: 16px;
+  }
+  html.dark .hero-card{ background: linear-gradient(135deg, #0A0A0C, #232326); }
+  .hero-label{ font-size: 12.5px; font-weight:600; opacity: 0.65; margin-bottom: 6px; }
+  .hero-value{ font-size: 34px; font-weight:800; letter-spacing:-0.5px; font-family: var(--font-mono); }
+  .hero-value.neg{ color: #FF6B6B; }
+  .hero-sub{ display:flex; gap:14px; margin-top: 14px; }
+  .hero-chip{ font-size: 12px; font-weight:600; opacity:0.85; display:flex; align-items:center; }
+  .hero-chip b{ font-family: var(--font-mono); font-weight:700; margin-left:5px; }
+  .hero-chip .dot{ display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:5px; }
+  .hero-chip .dot.rev{ background:#5AC8FA; }
+  .hero-chip .dot.cost{ background:#FF9F45; }
+
+  .stats-grid-3{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 4px 0 6px; }
+  .stats-grid-4{ display:grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 4px 0 6px; }
+  .stat-value-sm.danger{ color: var(--sys-red); }
+  .stat-value-sm.warn{ color: var(--sys-orange); }
+  .stat-value-sm.good{ color: var(--sys-green); }
+  .stat-card-sm{ background: var(--card-bg); border-radius: 12px; padding: 11px 8px; text-align:center; }
+  .stat-card-sm .stat-label{ font-size:10.5px; color: var(--label-secondary); font-weight:600; margin-bottom:4px; }
+  .stat-value-sm{ font-size: 15px; font-weight:700; font-family: var(--font-mono); }
+
+  .chart-card{ background: var(--card-bg); border-radius: 14px; padding: 16px 12px 10px; margin-bottom:14px; }
+  .chart-legend{ display:flex; gap:16px; font-size:11.5px; color: var(--label-secondary); margin-bottom:6px; font-weight:600; padding-left:4px; }
+  .chart-legend .dot{ display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:5px; }
+  .chart-legend .dot.rev{ background: var(--sys-blue); }
+  .chart-legend .dot.cost{ background: var(--sys-orange); }
+  .chart-body{ display:flex; gap:6px; }
+  .chart-yaxis{ display:flex; flex-direction:column; justify-content:space-between; padding: 2px 0 20px; }
+  .chart-yaxis span{ font-size:9.5px; color: var(--label-tertiary); font-weight:600; font-family: var(--font-mono); white-space:nowrap; }
+  .chart-plot{ flex:1; min-width:0; }
+  .chart-grid-line{ stroke: var(--separator); stroke-width:1; vector-effect: non-scaling-stroke; }
+
+  .donut-row{ display:flex; align-items:center; gap:20px; }
+  .donut-wrap{ position:relative; width:110px; height:110px; flex-shrink:0; }
+  .donut-svg{ width:100%; height:100%; transform: rotate(-90deg); }
+  .donut-bg{ fill:none; stroke: var(--sys-blue); stroke-width:14; }
+  .donut-fg{ fill:none; stroke: var(--sys-orange); stroke-width:14; stroke-linecap: round; transition: stroke-dasharray 0.4s; }
+  .donut-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .donut-pct{ font-size:20px; font-weight:800; font-family: var(--font-mono); }
+  .donut-pct.over{ color: var(--sys-red); }
+  .donut-label{ font-size:10px; color: var(--label-secondary); font-weight:600; margin-top:1px; }
+  .donut-legend{ display:flex; flex-direction:column; gap:10px; flex:1; }
+  .donut-legend-row{ display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; }
+  .donut-legend-row .dot{ display:inline-block; width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+  .donut-legend-row .dot.rev{ background: var(--sys-blue); }
+  .donut-legend-row .dot.cost{ background: var(--sys-orange); }
+  .donut-legend-row b{ margin-left:auto; font-family: var(--font-mono); font-weight:700; }
+  .chart-line{ stroke-width: 2.2; stroke-linecap:round; stroke-linejoin:round; vector-effect: non-scaling-stroke; }
+  .chart-line.rev{ stroke: var(--sys-blue); stroke-width: 2.6; }
+  .chart-line.cost{ stroke: var(--sys-orange); stroke-dasharray: 4 3; }
+  .chart-dot{ vector-effect: non-scaling-stroke; }
+  .chart-dot.rev{ fill: var(--sys-blue); }
+  .chart-dot.cost{ fill: var(--sys-orange); }
+
+  .stats-cat-row{ display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-bottom:0.5px solid var(--separator); font-size:13px; }
+  .stats-cat-row:last-child{ border-bottom:none; }
+  .stats-cat-name{ font-weight:600; }
+  .stats-cat-nums{ color: var(--label-secondary); font-family: var(--font-mono); font-size:12px; }
+  .stats-cat-pct{ font-weight:700; color: var(--sys-blue); min-width:42px; text-align:right; }
+
+  .history-entry{ display:flex; gap:10px; padding:8px 0; border-bottom:0.5px solid var(--separator); font-size:12.5px; }
+  .history-entry:last-child{ border-bottom:none; }
+  .history-entry .hd{ color: var(--label-secondary); font-family: var(--font-mono); font-size:11px; white-space:nowrap; }
+
+  .photo-upload-row{ display:flex; gap:10px; align-items:center; margin-bottom:14px; }
+  .photo-thumb{ width:56px; height:56px; border-radius:10px; object-fit:cover; background: var(--fill-secondary); }
+  .photo-btn{ border:none; background: var(--fill-secondary); color: var(--label); padding:9px 14px; border-radius:10px; font-size:12.5px; font-weight:600; cursor:pointer; }
+
   /* ---------- TOAST ---------- */
   .toast{
     position: fixed; left:50%; bottom: calc(96px + env(safe-area-inset-bottom));
@@ -217,6 +447,9 @@
   <header class="topbar">
     <div class="topbar-title">AvisBoost</div>
     <div class="topbar-actions">
+      <button class="icon-circle" id="themeBtn" title="Thème">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="7.5" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="9.5" cy="15" r="1" fill="currentColor" stroke="none"/></svg>
+      </button>
       <button class="icon-circle" id="exportBtn" title="Exporter">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
       </button>
@@ -231,6 +464,7 @@
 
     <!-- REGISTRE -->
     <section class="screen active" id="screen-registre">
+      <div class="banner" id="reviewReminderBanner" style="display:none;"></div>
       <div class="group-header">
         <div class="group-label">Cartes enregistrées <span class="count-badge" id="cardsCountBadge"></span></div>
         <button class="sort-icon-btn" id="cardsSortBtn" title="Trier">
@@ -242,26 +476,48 @@
 
     <!-- FINANCES -->
     <section class="screen" id="screen-finances">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-label">Dépensé</div>
-          <div class="stat-value" id="statCost">0 €</div>
+
+      <div class="hero-card">
+        <div class="hero-label">Bénéfice net total</div>
+        <div class="hero-value" id="statProfit">0 €</div>
+        <div class="hero-sub">
+          <span class="hero-chip"><i class="dot rev"></i>Encaissé <b id="statRevenue">0 €</b></span>
+          <span class="hero-chip"><i class="dot cost"></i>Dépensé <b id="statCost">0 €</b></span>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">Encaissé</div>
-          <div class="stat-value" id="statRevenue">0 €</div>
+      </div>
+
+      <div class="goal-card">
+        <div class="goal-head">
+          <div class="gt">🎯 Objectif du mois</div>
+          <div class="ge" id="editGoalBtn">Modifier</div>
         </div>
-        <div class="stat-card full">
-          <div class="stat-label">Bénéfice net</div>
-          <div class="stat-value" id="statProfit">0 €</div>
+        <div class="goal-bar-track"><div class="goal-bar-fill" id="goalBarFill" style="width:0%;"></div></div>
+        <div class="goal-sub" id="goalSubLabel">Aucun objectif défini</div>
+      </div>
+
+      <div class="group-header">
+        <div class="group-label">Répartition dépenses / CA</div>
+      </div>
+      <div class="chart-card" id="donutCard">
+        <div id="donutContent"></div>
+      </div>
+
+      <div class="stats-grid-4">
+        <div class="stat-card-sm">
+          <div class="stat-label">Commandées</div>
+          <div class="stat-value-sm" id="statOrderedCount">0</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">Cartes commandées</div>
-          <div class="stat-value" id="statOrderedCount">0</div>
+        <div class="stat-card-sm">
+          <div class="stat-label">Vendues</div>
+          <div class="stat-value-sm" id="statSoldCount">0</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">Cartes vendues</div>
-          <div class="stat-value" id="statSoldCount">0</div>
+        <div class="stat-card-sm">
+          <div class="stat-label">Marge / carte</div>
+          <div class="stat-value-sm" id="statAvgMargin">0 €</div>
+        </div>
+        <div class="stat-card-sm">
+          <div class="stat-label">En stock</div>
+          <div class="stat-value-sm" id="statStockRemaining">—</div>
         </div>
       </div>
 
@@ -282,6 +538,37 @@
       <div class="group" id="salesList"></div>
     </section>
 
+    <!-- PROSPECTION -->
+    <section class="screen" id="screen-prospection">
+      <div class="banner" id="dueTodayBanner" style="display:none;"></div>
+      <div class="prospection-toolbar">
+        <button class="toolbar-btn" id="selectModeBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Sélectionner
+        </button>
+        <button class="toolbar-btn" id="autoTourBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+          Tournée
+        </button>
+        <button class="toolbar-btn" id="statsBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          Stats
+        </button>
+        <button class="toolbar-btn" id="exportCsvBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg>
+          CSV
+        </button>
+      </div>
+      <div class="chip-row" id="radiusChips"></div>
+      <div class="group-header">
+        <div class="group-label">Prospects <span class="count-badge" id="prospectsCountBadge"></span></div>
+        <button class="sort-icon-btn" id="prospectsSortBtn" title="Trier">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+        </button>
+      </div>
+      <div class="group" id="prospectsList"></div>
+    </section>
+
   </main>
 
   <button class="fab" id="fabBtn">+</button>
@@ -294,6 +581,10 @@
     <button class="tab-item" data-view="finances">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
       <span>Finances</span>
+    </button>
+    <button class="tab-item" data-view="prospection">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <span>Prospection</span>
     </button>
   </nav>
 
@@ -325,8 +616,12 @@
       </div>
     </div>
     <div class="sheet-actions">
+      <button class="btn btn-secondary" id="cardReviewBtn">Avis non reçu</button>
       <button class="btn btn-secondary" id="cardToggleBtn">Marquer inactive</button>
-      <button class="btn btn-destructive" id="cardDeleteBtn">Supprimer</button>
+    </div>
+    <button class="btn btn-secondary btn-full" id="cardRelanceBtn" style="margin-bottom:10px; display:none;">💬 Message de relance</button>
+    <div class="sheet-actions">
+      <button class="btn btn-destructive btn-full" id="cardDeleteBtn">Supprimer</button>
     </div>
     <div class="sheet-actions">
       <button class="btn btn-secondary btn-full" id="cardCancelBtn">Annuler</button>
@@ -337,7 +632,7 @@
   <!-- SHEET: order add -->
   <div class="sheet" id="orderSheet">
     <div class="sheet-handle"></div>
-    <div class="sheet-title">Nouvelle commande de cartes</div>
+    <div class="sheet-title" id="orderSheetTitle">Nouvelle commande de cartes</div>
     <div class="field-row">
       <div class="field">
         <label>Date</label>
@@ -352,6 +647,9 @@
         <input type="text" id="oQty" placeholder="15">
       </div>
     </div>
+    <div class="sheet-actions" id="orderDeleteRow" style="display:none;">
+      <button class="btn btn-destructive btn-full" id="orderDeleteBtn">Supprimer</button>
+    </div>
     <div class="sheet-actions">
       <button class="btn btn-secondary btn-full" id="orderCancelBtn">Annuler</button>
       <button class="btn btn-primary btn-full" id="orderSaveBtn">Enregistrer</button>
@@ -365,7 +663,159 @@
     <div class="group" id="sortOptionsList"></div>
   </div>
 
+  <!-- SHEET: prospect detail -->
+  <div class="sheet" id="prospectSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title company-name" id="prospectSheetTitle">Commerce</div>
+    <div class="row-sub" id="prospectSheetSub" style="margin-bottom:14px;"></div>
+    <div class="hours-table" id="prospectHoursTable" style="display:none;"></div>
+
+    <div class="photo-upload-row">
+      <img class="photo-thumb" id="prospectPhotoThumb" style="display:none;">
+      <button class="photo-btn" id="prospectPhotoBtn">📷 Ajouter une photo</button>
+      <input type="file" id="prospectPhotoInput" accept="image/*" capture="environment" hidden>
+    </div>
+
+    <div class="status-choice-grid">
+      <button class="status-choice todo" data-status="todo"><span class="dot"></span>À faire</button>
+      <button class="status-choice yes" data-status="yes"><span class="dot"></span>Oui / vendu</button>
+      <button class="status-choice no" data-status="no"><span class="dot"></span>Non</button>
+      <button class="status-choice later" data-status="later"><span class="dot"></span>À repasser</button>
+    </div>
+
+    <div class="field" id="prospectFollowUpField" style="display:none;">
+      <label>Repasser le</label>
+      <input type="date" id="prospectFollowUpDate">
+    </div>
+
+    <div class="field">
+      <label>Note (optionnel)</label>
+      <input type="text" id="prospectNote" placeholder="ex. Demander la responsable">
+    </div>
+
+    <div class="hours-table" id="prospectHistoryBox" style="display:none;"></div>
+
+    <div class="sheet-actions">
+      <button class="btn btn-streetview" id="prospectStreetViewBtn">📷 Street View</button>
+      <button class="btn btn-waze" id="prospectWazeBtn">🧭 Waze</button>
+    </div>
+
+    <div class="sheet-actions">
+      <button class="btn btn-secondary btn-full" id="prospectCancelBtn">Fermer</button>
+      <button class="btn btn-primary btn-full" id="prospectSaveBtn">Enregistrer</button>
+    </div>
+  </div>
+
+  <!-- SHEET: add manual prospect -->
+  <div class="sheet" id="addProspectSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Nouveau prospect</div>
+    <div class="field">
+      <label>Nom du commerce</label>
+      <input type="text" id="pName" placeholder="ex. Boulangerie du Centre">
+    </div>
+    <div class="field">
+      <label>Adresse</label>
+      <input type="text" id="pAddress" placeholder="ex. 12 Grande Rue, Miribel">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Catégorie</label>
+        <input type="text" id="pCategory" placeholder="Restaurant">
+      </div>
+      <div class="field">
+        <label>Distance (km)</label>
+        <input type="text" id="pDistance" placeholder="1.2">
+      </div>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-secondary btn-full" id="addProspectCancelBtn">Annuler</button>
+      <button class="btn btn-primary btn-full" id="addProspectSaveBtn">Ajouter</button>
+    </div>
+  </div>
+
+  <!-- SHEET: choose number of stops for auto tour -->
+  <div class="sheet" id="tourCountSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Proposer une tournée</div>
+    <div class="tour-info">Je choisis parmi tes prospects "À faire" ou "À repasser", ouverts maintenant en priorité, triés pour minimiser les trajets depuis ta position.</div>
+    <div class="tour-chip-row">
+      <button class="tour-chip" data-n="3">3</button>
+      <button class="tour-chip" data-n="5">5</button>
+      <button class="tour-chip" data-n="8">8</button>
+      <button class="tour-chip" data-n="10">10</button>
+    </div>
+    <button class="btn btn-secondary btn-full" id="tourCountCancelBtn">Annuler</button>
+  </div>
+
+  <!-- SHEET: tour result -->
+  <div class="sheet" id="tourResultSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Ta tournée</div>
+    <div class="tour-info">Waze ne gère pas les étapes multiples : ouvre chaque arrêt dans l'ordre, un par un.</div>
+    <div class="group" id="tourStopsList"></div>
+    <div class="sheet-actions">
+      <button class="btn btn-secondary btn-full" id="tourResultCloseBtn">Fermer</button>
+    </div>
+  </div>
+
+  <!-- SHEET: stats by category -->
+  <div class="sheet" id="statsSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Taux de conversion</div>
+    <div class="tour-info">Prospects contactés (statut ≠ à faire) vs vendus, par catégorie.</div>
+    <div class="group" id="statsCatList"></div>
+    <button class="btn btn-secondary btn-full" id="statsCloseBtn" style="margin-top:14px;">Fermer</button>
+  </div>
+
+  <!-- SHEET: edit monthly goal -->
+  <!-- SHEET: theme picker -->
+  <div class="sheet" id="themeSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Apparence</div>
+    <div class="theme-section-label">Mode</div>
+    <div class="chip-row" id="themeModeChips" style="margin-bottom:20px;"></div>
+    <div class="theme-section-label">Couleur d'accent</div>
+    <div class="accent-swatch-row" id="accentSwatches"></div>
+    <button class="btn btn-secondary btn-full" id="themeCloseBtn" style="margin-top:20px;">Fermer</button>
+  </div>
+
+  <div class="sheet" id="goalSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Objectif du mois</div>
+    <div class="field">
+      <label>Nombre de cartes à vendre ce mois-ci</label>
+      <input type="number" id="goalInput" placeholder="ex. 20" inputmode="numeric">
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-secondary btn-full" id="goalCancelBtn">Annuler</button>
+      <button class="btn btn-primary btn-full" id="goalSaveBtn">Enregistrer</button>
+    </div>
+  </div>
+
+  <!-- SHEET: relance message -->
+  <div class="sheet" id="relanceSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Message de relance</div>
+    <div class="field">
+      <label>Message (modifiable)</label>
+      <textarea id="relanceText" rows="6" style="width:100%; font-family:var(--font-ui); font-size:14px; padding:12px; border-radius:12px; border:none; background:var(--card-bg); color:var(--label); resize:vertical;"></textarea>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-secondary btn-full" id="relanceCopyBtn">📋 Copier</button>
+      <button class="btn btn-primary btn-full" id="relanceWhatsappBtn">💬 WhatsApp</button>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn btn-secondary btn-full" id="relanceSmsBtn">✉️ SMS</button>
+      <button class="btn btn-secondary btn-full" id="relanceCloseBtn">Fermer</button>
+    </div>
+  </div>
+
   <div class="toast" id="toast"></div>
+  <div class="selection-bar" id="selectionBar" style="display:none;">
+    <span id="selectionCount">0 sélectionné(s)</span>
+    <button id="selectionGoBtn">Voir la tournée</button>
+  </div>
 
 </div>
 
@@ -381,13 +831,31 @@ let cardSort = 'date-desc';
 let orderSort = 'date-desc';
 let salesSort = 'date-desc';
 
+/* ---------- PROSPECTION STATE ---------- */
+const PROSPECTS_KEY = 'avisboost_prospects';
+const PROSPECT_STATUS_KEY = 'avisboost_prospect_status';
+let prospects = [];       // seed + manually added, merged
+let prospectStatus = {};  // id -> { status, followUpDate, note }
+let radiusFilter = 20;    // 5, 10, 15, 20 -> max km shown; 'all' too
+let prospectSort = 'distance-asc';
+let editingProspectId = null;
+let selectMode = false;
+let selectedProspectIds = new Set();
+let userGeoPos = null; // {lat, lng} once obtained
+
+const PROSPECTS_SEED = [{"name": "Barber Men", "address": "50 Rue du Figuier, 01700 Miribel", "category": "Coiffeur", "rating": 4.7, "distance": 0.2, "lat": 45.828723, "lng": 4.969594, "hours": [[[600, 1170]], [[600, 1170]], [[600, 1170]], [[600, 1170]], [[600, 1170]], [[600, 1170]], [[600, 1170]]]}, {"name": "Le temps d'une fleur, Artisan Fleuriste", "address": "53 Rue du Figuier, 01700 Miribel", "category": "Fleuriste", "rating": 4.8, "distance": 0.2, "lat": 45.828759, "lng": 4.969589, "hours": [null, [[540, 720]], [[540, 720]], [[570, 720]], [[540, 720]], [[540, 1140]], [[540, 735]]]}, {"name": "Restaurant le Saint Martin", "address": "485 Rue de Saint-Martin, 01700 Miribel", "category": "Restaurant", "rating": 5.0, "distance": 0.4, "lat": 45.828356, "lng": 4.963578, "hours": null}, {"name": "Benkhalifa Aicha", "address": "2142 Grande Rue, 01700 Miribel", "category": "Dentiste", "rating": 4.3, "distance": 0.4, "lat": 45.826203, "lng": 4.966916, "hours": [[[540, 1020]], [[540, 1020]], [[600, 960]], [[540, 1020]], [[540, 960]], null, null]}, {"name": "Mansilha Antonio", "address": "105 Av. Henri Deschamps, 01700 Miribel", "category": "Toiletteur", "rating": 5.0, "distance": 0.5, "lat": 45.827443, "lng": 4.962499, "hours": [null, null, null, null, null, null, null]}, {"name": "Coiffure à domicile", "address": "96 Rue du Four À Chaux, 01700 Miribel", "category": "Coiffeur", "rating": 5.0, "distance": 0.6, "lat": 45.82507, "lng": 4.969207, "hours": [[[510, 1140]], [[510, 1140]], [[510, 1140]], [[510, 1140]], [[510, 1140]], [[510, 1140]], null]}, {"name": "Au Pétrin d'Antan", "address": "35 Rte de Genève, 01700 Saint-Maurice-de-Beynost", "category": "Boulangerie", "rating": 4.0, "distance": 0.6, "lat": 45.828968, "lng": 4.976111, "hours": [[[360, 1140]], [[360, 1140]], null, [[360, 1140]], [[360, 1140]], [[420, 1140]], [[420, 780]]]}, {"name": "AL Auto", "address": "1 Rue du Mollard, 01700 Miribel", "category": "Garage auto", "rating": 5.0, "distance": 0.7, "lat": 45.825428, "lng": 4.961173, "hours": [[[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 720]], null]}, {"name": "AD Carrosserie ALLURAUTO", "address": "Rue des Brotteaux, 01700 Miribel", "category": "Garage auto", "rating": 4.9, "distance": 0.7, "lat": 45.823446, "lng": 4.968757, "hours": [[[480, 720]], [[480, 720]], [[480, 720]], [[480, 720]], [[480, 720]], null, null]}, {"name": "Aprium Pharmacie de la Cotiere", "address": "41 Rte de Genève, 01700 Saint-Maurice-de-Beynost", "category": "Pharmacie", "rating": 4.5, "distance": 0.7, "lat": 45.829349, "lng": 4.97714, "hours": [[[510, 735]], [[510, 735]], [[510, 735]], [[510, 735]], [[510, 735]], [[510, 735]], null]}, {"name": "Esthétichien", "address": "1611 Grande Rue, 01700 Miribel", "category": "Toiletteur", "rating": 4.7, "distance": 0.7, "lat": 45.826427, "lng": 4.959978, "hours": [null, [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], null]}, {"name": "GH beauté by Caroline", "address": "1521 Grande Rue, 01700 Miribel", "category": "Institut de beauté", "rating": 5.0, "distance": 0.8, "lat": 45.826218, "lng": 4.958805, "hours": [[[540, 1080]], [[540, 1080]], [[540, 1080]], [[540, 1080]], [[540, 1080]], [[540, 1020]], null]}, {"name": "L'instant Beauty by Nadia", "address": "101 Rue des Brotteaux, 01700 Miribel", "category": "Institut de beauté", "rating": 5.0, "distance": 0.8, "lat": 45.823008, "lng": 4.965553, "hours": [[[510, 1140]], [[510, 1140]], [[510, 1140]], [[510, 1140]], [[510, 1140]], [[510, 1140]], [[510, 1200]]]}, {"name": "Atelier by P", "address": "554 Rue de la Traille, 01700 Miribel", "category": "Institut de beauté", "rating": 5.0, "distance": 0.8, "lat": 45.823351, "lng": 4.965566, "hours": [[[540, 1140]], null, [[540, 900]], [[540, 1140]], [[540, 1080]], [[480, 780]], null]}, {"name": "Manaé institut", "address": "1521 Grande Rue, 01700 Miribel", "category": "Institut de beauté", "rating": 5.0, "distance": 0.8, "lat": 45.826218, "lng": 4.958805, "hours": [[[540, 1020]], [[540, 1020]], [[540, 720]], [[540, 1020]], [[540, 1020]], [[540, 720]], null]}, {"name": "Maison Alicia", "address": "554 Rue de la Traille, 01700 Miribel", "category": "Institut de beauté", "rating": 5.0, "distance": 0.8, "lat": 45.823351, "lng": 4.965566, "hours": [[[540, 1080]], [[600, 960]], null, [[600, 960]], [[540, 1080]], [[480, 780]], null]}, {"name": "GARAGE CHAMPION AUTO EUROREPAR", "address": "177 Rue des Brotteaux, 01700 Miribel", "category": "Garage auto", "rating": 4.8, "distance": 0.8, "lat": 45.823192, "lng": 4.966243, "hours": [[[510, 720]], [[510, 720]], [[510, 720]], [[510, 720]], [[510, 720]], null, null]}, {"name": "Cabinet d'Orthodontie Dr Mouna Remorini", "address": "1527 Grande Rue, 01700 Miribel", "category": "Dentiste", "rating": 4.9, "distance": 0.8, "lat": 45.826131, "lng": 4.958856, "hours": [null, [[540, 810]], [[540, 810]], [[540, 810]], [[540, 810]], null, null]}, {"name": "Atelier-Boutique Bouillet Miribel", "address": "114 Quai du Rhône, 01700 Miribel", "category": "Boulangerie", "rating": 4.2, "distance": 0.9, "lat": 45.822618, "lng": 4.962538, "hours": [[[480, 1140]], [[480, 1140]], [[480, 1140]], [[480, 1140]], [[480, 1140]], [[480, 1140]], [[480, 750]]]}, {"name": "MC2 AUTO - AutoFirst", "address": "66 Rue de la Traille, 01700 Miribel", "category": "Garage auto", "rating": 4.9, "distance": 0.9, "lat": 45.823061, "lng": 4.962491, "hours": [[[450, 720]], [[450, 720]], [[450, 720]], [[450, 720]], [[450, 720]], [[540, 780]], null]}, {"name": "Pharmacie Vuillemenot", "address": "1422 Grande Rue, 01700 Miribel", "category": "Pharmacie", "rating": 4.4, "distance": 0.9, "lat": 45.825815, "lng": 4.957817, "hours": [[[510, 720]], [[510, 720]], [[510, 720]], [[510, 720]], [[510, 720]], [[510, 750]], null]}, {"name": "Opticien Miribel - Cotiere - Krys", "address": "1423 Grande Rue, 01700 Miribel", "category": "Opticien", "rating": 4.9, "distance": 0.9, "lat": 45.825956, "lng": 4.957766, "hours": [null, [[540, 735]], [[540, 735]], [[540, 735]], [[540, 735]], [[540, 780]], null]}, {"name": "Geraldine Coiffure", "address": "1289 Grande Rue, 01700 Miribel", "category": "Coiffeur", "rating": 4.8, "distance": 1.0, "lat": 45.82539, "lng": 4.956157, "hours": [null, [[540, 1080]], [[540, 1110]], [[540, 1140]], [[540, 1140]], [[540, 960]], null]}, {"name": "Asphalte Miribel", "address": "1311 Grande Rue, 01700 Miribel", "category": "Auto-école", "rating": 4.6, "distance": 1.0, "lat": 45.825508, "lng": 4.956324, "hours": [null, [[600, 750]], [[600, 750]], [[600, 750]], [[600, 750]], [[540, 720]], null]}, {"name": "Parfumerie Maud", "address": "1237 Grande Rue, 01700 Miribel", "category": "Institut de beauté", "rating": 4.9, "distance": 1.1, "lat": 45.825137, "lng": 4.955552, "hours": [null, [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 840]], null]}, {"name": "Maison BERTIN", "address": "1198 Grande Rue, 01700 Miribel", "category": "Boulangerie", "rating": 4.6, "distance": 1.1, "lat": 45.82483, "lng": 4.95527, "hours": [null, [[360, 810]], [[360, 810]], [[360, 810]], [[360, 810]], [[360, 780]], [[420, 780]]]}, {"name": "Orpi MS Miribel Immobilier", "address": "1261 Grande Rue, 01700 Miribel", "category": "Agence immobilière", "rating": 4.7, "distance": 1.1, "lat": 45.825252, "lng": 4.955798, "hours": [[[540, 735]], [[540, 735]], [[540, 735]], [[540, 735]], [[540, 735]], null, null]}, {"name": "Boutique M", "address": "1260 Grande Rue, 01700 Miribel", "category": "Boutique vêtements", "rating": 4.9, "distance": 1.1, "lat": 45.825123, "lng": 4.955881, "hours": [null, [[540, 735]], [[540, 735]], [[540, 735]], [[540, 735]], [[540, 735]], null]}, {"name": "Restaurant Le Quai", "address": "10 Quai du Rhône, 01700 Miribel", "category": "Restaurant", "rating": 4.7, "distance": 1.2, "lat": 45.822257, "lng": 4.957288, "hours": [null, null, null, null, null, null, null]}, {"name": "Miri'Style", "address": "1161 Grande Rue, 01700 Miribel", "category": "Coiffeur", "rating": 4.2, "distance": 1.2, "lat": 45.824756, "lng": 4.954789, "hours": [[[540, 720]], [[540, 1080]], [[510, 1080]], [[540, 1080]], [[510, 1200]], [[480, 990]], null]}, {"name": "IDB Boulangerie", "address": "1156 Grande Rue, 01700 Miribel", "category": "Boulangerie", "rating": 4.3, "distance": 1.2, "lat": 45.824643, "lng": 4.954782, "hours": [[[390, 1200]], [[390, 1200]], [[390, 1200]], [[390, 1200]], [[390, 1200]], [[390, 1200]], [[450, 1200]]]}, {"name": "Les créations de Bastien", "address": "1133 Grande Rue, 01700 Miribel", "category": "Boulangerie", "rating": 4.3, "distance": 1.2, "lat": 45.824637, "lng": 4.954422, "hours": null}, {"name": "GAM garage auto", "address": "70 Av. de la Gare, 01700 Miribel", "category": "Garage auto", "rating": 4.6, "distance": 1.2, "lat": 45.822996, "lng": 4.95623, "hours": [[[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[600, 900]], null]}, {"name": "Pharmacie de la Madone", "address": "1138 Grande Rue, 01700 Miribel", "category": "Pharmacie", "rating": 4.5, "distance": 1.2, "lat": 45.824586, "lng": 4.95465, "hours": null}, {"name": "Eugénie Agence Immobilière", "address": "2 Rue Joseph Carre, 01700 Miribel", "category": "Agence immobilière", "rating": 5.0, "distance": 1.2, "lat": 45.824777, "lng": 4.954379, "hours": [[[540, 720]], [[540, 720]], [[540, 720]], [[540, 720]], [[540, 720]], null, null]}, {"name": "Cabinet dentaire Astrea", "address": "20bis Rue Joseph Carre, 01700 Miribel", "category": "Dentiste", "rating": 4.3, "distance": 1.2, "lat": 45.826127, "lng": 4.953636, "hours": null}, {"name": "Dr Mazel Laurent et associés", "address": "20bis Rue Joseph Carre, 01700 Miribel", "category": "Dentiste", "rating": 4.6, "distance": 1.2, "lat": 45.826127, "lng": 4.953636, "hours": [[[510, 750]], [[510, 750]], [[510, 750]], [[510, 750]], [[510, 750]], null, null]}, {"name": "Mon coiffeur exclusif", "address": "1016 Grande Rue, 01700 Miribel", "category": "Coiffeur", "rating": 4.5, "distance": 1.3, "lat": 45.824085, "lng": 4.953151, "hours": [null, [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[480, 1020]], null]}, {"name": "BELV'HOMME", "address": "1050 Grande Rue, 01700 Miribel", "category": "Coiffeur", "rating": 5.0, "distance": 1.3, "lat": 45.824178, "lng": 4.953567, "hours": [[[570, 1170]], [[570, 1170]], [[570, 1170]], [[570, 1170]], [[570, 780]], [[570, 1170]], null]}, {"name": "Garage AUTOMOTIVE", "address": "160 Av. de la Gare, 01700 Miribel", "category": "Garage auto", "rating": 5.0, "distance": 1.3, "lat": 45.82272, "lng": 4.954974, "hours": [[[540, 1080]], [[540, 1080]], [[540, 1080]], [[540, 1080]], [[540, 1080]], [[540, 750]], null]}, {"name": "Pharmacie Centrale", "address": "Pl. du Marché, 01700 Miribel", "category": "Pharmacie", "rating": 4.3, "distance": 1.3, "lat": 45.824382, "lng": 4.953579, "hours": [[[510, 750]], [[510, 750]], [[510, 750]], [[510, 750]], [[510, 750]], [[510, 750]], null]}, {"name": "J'aime Mes Lunettes", "address": "1064 Grande Rue, 01700 Miribel", "category": "Opticien", "rating": 4.5, "distance": 1.3, "lat": 45.824245, "lng": 4.953747, "hours": [null, [[540, 720]], [[540, 720]], [[540, 720]], [[540, 720]], [[540, 720]], null]}, {"name": "Optique du centre", "address": "1064 Grande Rue, 01700 Miribel", "category": "Opticien", "rating": 2.9, "distance": 1.3, "lat": 45.824291, "lng": 4.953724, "hours": [null, [[600, 720]], [[600, 720]], [[600, 720]], [[600, 720]], [[600, 720]], null]}, {"name": "Agence immobilière Laforêt Miribel", "address": "1029 Grande Rue, 01700 Miribel", "category": "Agence immobilière", "rating": 4.9, "distance": 1.3, "lat": 45.824302, "lng": 4.953249, "hours": [[[540, 720]], [[540, 720]], [[540, 720]], [[540, 720]], [[540, 720]], null, null]}, {"name": "Emotion Immobilier Miribel", "address": "186 Av. de la Gare, 01700 Miribel", "category": "Agence immobilière", "rating": 4.0, "distance": 1.3, "lat": 45.822709, "lng": 4.954802, "hours": [[[540, 720]], [[540, 720]], [[540, 720]], [[540, 720]], [[540, 720]], null, null]}, {"name": "Agence immobilière Guy Hoquet MIRIBEL", "address": "1080 Grande Rue, 01700 Miribel", "category": "Agence immobilière", "rating": 4.4, "distance": 1.3, "lat": 45.824331, "lng": 4.95385, "hours": [[[510, 1170]], [[510, 1170]], [[510, 1170]], [[510, 1170]], [[510, 1110]], null, null]}, {"name": "Comptoir Mode", "address": "1019 Grande Rue, 01700 Miribel", "category": "Boutique vêtements", "rating": 4.9, "distance": 1.3, "lat": 45.824262, "lng": 4.953118, "hours": [null, [[600, 780]], [[600, 780]], [[600, 780]], [[600, 780]], [[600, 780]], null]}, {"name": "Evanescence", "address": "1022 Grande Rue, 01700 Miribel", "category": "Boutique vêtements", "rating": 4.5, "distance": 1.3, "lat": 45.824148, "lng": 4.953261, "hours": [null, [[570, 720]], [[570, 720]], [[570, 720]], [[570, 720]], [[570, 750]], null]}, {"name": "LesDeuxK", "address": "973 Grande Rue, 01700 Miribel", "category": "Restaurant", "rating": 5.0, "distance": 1.4, "lat": 45.824056, "lng": 4.952531, "hours": [null, null, [[720, 1080]], null, null, [[600, 870]], [[600, 870]]]}, {"name": "Le Palmyre", "address": "960 Grande Rue, 01700 Miribel", "category": "Restaurant", "rating": 4.9, "distance": 1.4, "lat": 45.82388, "lng": 4.95255, "hours": [[[660, 840]], [[660, 840]], [[660, 840]], [[660, 840]], [[660, 840]], [[660, 840]], null]}, {"name": "Art Tendance Coiffure", "address": "33 Rue Henri Grobon, 01700 Miribel", "category": "Coiffeur", "rating": 4.8, "distance": 1.4, "lat": 45.824045, "lng": 4.951851, "hours": [[[540, 960]], [[540, 1140]], null, [[540, 1140]], [[540, 1140]], [[540, 1020]], null]}, {"name": "Fleurs des 4 Saisons", "address": "Pl. Henri Grobon, 01700 Miribel", "category": "Fleuriste", "rating": 4.5, "distance": 1.4, "lat": 45.823851, "lng": 4.951879, "hours": [null, [[450, 735]], [[450, 735]], [[450, 735]], [[450, 735]], [[450, 1140]], [[510, 750]]]}, {"name": "Bruchon Sylvain", "address": "198 Rue Henri Grobon, 01700 Miribel", "category": "Dentiste", "rating": 4.7, "distance": 1.4, "lat": 45.825494, "lng": 4.951253, "hours": [[[540, 780]], [[540, 780]], null, [[540, 780]], [[540, 780]], null, null]}, {"name": "MIRIGRILL", "address": "811 Grande Rue, 01700 Miribel", "category": "Restaurant", "rating": 4.5, "distance": 1.5, "lat": 45.82328, "lng": 4.950783, "hours": [null, null, null, null, null, null, null]}, {"name": "Laurence C Coiffure", "address": "811 Grande Rue, 01700 Miribel", "category": "Coiffeur", "rating": 5.0, "distance": 1.5, "lat": 45.823281, "lng": 4.950783, "hours": [[[540, 1050]], [[540, 1110]], [[540, 1110]], [[660, 1200]], [[540, 1020]], null, null]}, {"name": "HOPE COIFFURE", "address": "391 Rue Général Degoutte, 01700 Miribel", "category": "Coiffeur", "rating": 5.0, "distance": 1.5, "lat": 45.825157, "lng": 4.949294, "hours": [[[480, 1080]], [[480, 1080]], null, [[480, 1080]], [[480, 1080]], [[480, 1080]], [[480, 1080]]]}, {"name": "AK AUTO", "address": "1 Av. de la Gare, 01700 Miribel", "category": "Garage auto", "rating": 4.9, "distance": 1.5, "lat": 45.821908, "lng": 4.952926, "hours": [[[480, 1140]], [[480, 1140]], [[480, 1140]], [[480, 1140]], [[480, 1140]], [[480, 1140]], null]}, {"name": "Luminescence Esthétique", "address": "696 Grande Rue, 01700 Miribel", "category": "Institut de beauté", "rating": 4.8, "distance": 1.6, "lat": 45.822512, "lng": 4.949788, "hours": [null, [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 900]], null]}, {"name": "Sixième Avenue, L'immobilier par M6", "address": "750 Grande Rue, 01700 Miribel", "category": "Agence immobilière", "rating": 4.7, "distance": 1.6, "lat": 45.822764, "lng": 4.950249, "hours": [[[570, 720]], [[570, 720]], [[570, 720]], [[570, 720]], [[570, 720]], null, null]}, {"name": "Institut Beleza", "address": "2100 Mnt Neuve, 01700 Miribel", "category": "Institut de beauté", "rating": 4.7, "distance": 1.7, "lat": 45.829733, "lng": 4.945918, "hours": [[[540, 1140]], [[540, 1140]], [[540, 1140]], null, [[540, 1140]], [[540, 780]], null]}, {"name": "Boulangerie-Pâtisserie Saulnier", "address": "83 Lot. le Clos du Mas Rillier, 01700 Miribel", "category": "Boulangerie", "rating": 4.5, "distance": 1.7, "lat": 45.829984, "lng": 4.946463, "hours": [null, [[395, 810]], [[420, 810]], [[395, 810]], [[395, 810]], [[425, 780]], [[425, 750]]]}, {"name": "Garage DELKO Miribel", "address": "623 Grande Rue, 01700 Miribel", "category": "Garage auto", "rating": 4.9, "distance": 1.7, "lat": 45.822531, "lng": 4.948702, "hours": [[[480, 720]], [[480, 720]], [[480, 720]], [[480, 720]], [[480, 720]], null, null]}, {"name": "Institut ELIANE", "address": "336 Grande Rue, 01700 Miribel", "category": "Institut de beauté", "rating": 4.9, "distance": 2.0, "lat": 45.82098, "lng": 4.94575, "hours": null}, {"name": "Garage R.D.M", "address": "246 Imp. du Sermoraz, 01700 Beynost", "category": "Garage auto", "rating": 4.9, "distance": 2.1, "lat": 45.831645, "lng": 4.995043, "hours": [[[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], null]}, {"name": "SWISS VISION", "address": "Centre Commercial Beynost 2, 01700 Beynost", "category": "Opticien", "rating": 4.6, "distance": 2.2, "lat": 45.825597, "lng": 4.99608, "hours": [[[540, 1170]], [[540, 1170]], [[540, 1170]], [[540, 1170]], [[540, 1170]], [[540, 1170]], null]}, {"name": "Optique Leclerc Beynost", "address": "ZAC des Baterses, 01700 Beynost", "category": "Opticien", "rating": 4.6, "distance": 2.2, "lat": 45.826161, "lng": 4.995769, "hours": [[[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], null]}, {"name": "Opticien BEYNOST - Optical Center", "address": "Chem. des Malettes, 01700 Beynost", "category": "Opticien", "rating": 4.6, "distance": 2.2, "lat": 45.821776, "lng": 4.993132, "hours": [[[600, 1140]], [[600, 1140]], [[600, 1140]], [[600, 1140]], [[600, 1140]], [[600, 1140]], null]}, {"name": "Générale d'Optique BEYNOST", "address": "All. des Petites Combes, 01700 Beynost", "category": "Opticien", "rating": 4.9, "distance": 2.2, "lat": 45.826157, "lng": 4.995756, "hours": [[[570, 1140]], [[570, 1140]], [[570, 1140]], [[570, 1140]], [[570, 1140]], [[570, 1140]], null]}, {"name": "Garage Tholon", "address": "645 Rte du Mas Rillier, 01700 Miribel", "category": "Garage auto", "rating": 4.6, "distance": 2.3, "lat": 45.828655, "lng": 4.938663, "hours": null}, {"name": "Opticien Beynost Parking Leclerc - Atol", "address": "Parking C. Cial Leclerc, 01700 Beynost", "category": "Opticien", "rating": 5.0, "distance": 2.4, "lat": 45.826242, "lng": 4.998356, "hours": [[[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], null]}, {"name": "Opticien BEYNOST - ALAIN AFFLELOU", "address": "Chem. des Batterses, 01700 Beynost", "category": "Opticien", "rating": 4.9, "distance": 2.4, "lat": 45.826024, "lng": 4.998402, "hours": [[[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], null]}, {"name": "Auberge de Saint Didier", "address": "1 Rue de l'Église, 01700 Neyron", "category": "Restaurant", "rating": 4.4, "distance": 3.1, "lat": 45.820986, "lng": 4.929941, "hours": [null, null, null, null, null, null, null]}, {"name": "Studio Beauty (110 Nattes)", "address": "86 Rte de Genève, 01700 Neyron", "category": "Coiffeur", "rating": 4.7, "distance": 3.2, "lat": 45.815316, "lng": 4.932598, "hours": [[[600, 960]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[480, 840]], null]}, {"name": "La Baraka", "address": "Chem. de l'Île, 01700 Miribel", "category": "Restaurant", "rating": 3.6, "distance": 3.4, "lat": 45.807824, "lng": 4.937023, "hours": [[[630, 1380]], [[630, 1380]], [[630, 1380]], [[630, 1380]], [[630, 0]], [[630, 1380]], [[630, 1380]]]}, {"name": "DELTA Immobilier", "address": "139 Rte de Genève, 01700 Neyron", "category": "Agence immobilière", "rating": 5.0, "distance": 3.8, "lat": 45.811292, "lng": 4.927604, "hours": [[[480, 1200]], [[480, 1200]], [[480, 1200]], [[480, 1200]], [[480, 1200]], [[480, 1200]], null]}, {"name": "Les Saveurs du Grand Parc", "address": "Grand Parc Miribel Jonage, 69120 Vaulx-en-Velin", "category": "Restaurant", "rating": 4.1, "distance": 4.0, "lat": 45.799655, "lng": 4.941133, "hours": [[[570, 1140]], [[570, 1140]], [[570, 1140]], [[570, 1140]], [[570, 1140]], [[540, 1140]], [[540, 1140]]]}, {"name": "Les Accords d'M", "address": "1029 Rte nationale, 01120 La Boisse", "category": "Restaurant", "rating": 4.7, "distance": 5.4, "lat": 45.844424, "lng": 5.034937, "hours": [null, null, null, null, null, null, null]}, {"name": "Cabot Styl", "address": "3034 Rte de Strasbourg, 69140 Rillieux-la-Pape", "category": "Toiletteur", "rating": 4.7, "distance": 5.5, "lat": 45.820869, "lng": 4.897759, "hours": [[[540, 870]], [[570, 1110]], [[570, 1110]], [[570, 1110]], [[570, 1140]], [[540, 870]], null]}, {"name": "Au Coin Perdu", "address": "Route de Tramoyes, 01700 Miribel", "category": "Restaurant", "rating": 4.0, "distance": 5.6, "lat": 45.872038, "lng": 4.929376, "hours": [[[540, 900]], null, [[540, 900]], [[540, 900]], [[540, 900]], [[540, 900]], [[540, 930]]]}, {"name": "Belle en Soie", "address": "1 Rue Duquesne, 69330 Meyzieu", "category": "Institut de beauté", "rating": 4.2, "distance": 5.6, "lat": 45.782938, "lng": 4.994207, "hours": [null, [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[480, 960]], null]}, {"name": "Boulangerie Marcel", "address": "699 Rte de Strasbourg, 01700 Miribel", "category": "Boulangerie", "rating": 4.1, "distance": 6.2, "lat": 45.870614, "lng": 4.912268, "hours": [[[360, 1170]], [[360, 1170]], [[360, 1170]], [[360, 1170]], [[360, 1170]], [[420, 1140]], null]}, {"name": "L'atelier coiffure la beauté à 360°", "address": "74 Av. de Verdun, 69330 Meyzieu", "category": "Coiffeur", "rating": 4.8, "distance": 6.2, "lat": 45.777457, "lng": 4.993407, "hours": [null, [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1020]], null]}, {"name": "la Table des Dombes", "address": "983 Rte de Strasbourg, 01700 Miribel", "category": "Restaurant", "rating": 4.3, "distance": 6.5, "lat": 45.873076, "lng": 4.91162, "hours": [null, null, null, null, null, null, null]}, {"name": "Danjoux & co", "address": "1 Rue nationale, 69330 Jonage", "category": "Boulangerie", "rating": 4.1, "distance": 6.6, "lat": 45.790022, "lng": 5.03181, "hours": [[[390, 1140]], [[390, 1140]], [[390, 1140]], [[390, 1140]], [[390, 1140]], [[390, 1080]], null]}, {"name": "L'Instant Pour Soi", "address": "28 Rue Paul Cézanne, 69330 Meyzieu", "category": "Institut de beauté", "rating": 4.7, "distance": 7.1, "lat": 45.767786, "lng": 4.98634, "hours": [[[540, 1080]], [[540, 1140]], [[540, 1080]], [[540, 1140]], [[540, 1140]], [[540, 1080]], null]}, {"name": "Le Temps Des Saisons", "address": "1 Bis Imp. du Boucher, 69330 Jonage", "category": "Restaurant", "rating": 4.5, "distance": 7.1, "lat": 45.796021, "lng": 5.046146, "hours": [null, null, null, null, null, null, null]}, {"name": "La Boucherie de Jonage", "address": "62 Rue nationale, 69330 Jonage", "category": "Boulangerie", "rating": 5.0, "distance": 7.1, "lat": 45.796187, "lng": 5.045914, "hours": [null, [[495, 735]], [[495, 735]], [[495, 735]], [[495, 735]], [[495, 735]], [[495, 735]]]}, {"name": "Aux P'tits Oignons", "address": "205 Grande Rue, 01120 Montluel", "category": "Restaurant", "rating": 4.4, "distance": 7.2, "lat": 45.851264, "lng": 5.055852, "hours": [null, null, null, null, null, null, null]}, {"name": "Le Grillesia Jonage", "address": "13 Pl. du Général de Gaulle, 69330 Jonage", "category": "Restaurant", "rating": 4.3, "distance": 7.2, "lat": 45.79605, "lng": 5.04718, "hours": [null, null, null, null, null, null, null]}, {"name": "La Cuisine de Nan", "address": "11 Pl. du Général de Gaulle, 69330 Jonage", "category": "Restaurant", "rating": 5.0, "distance": 7.2, "lat": 45.795949, "lng": 5.047292, "hours": [null, [[660, 1260]], [[660, 1260]], [[660, 1260]], [[660, 1260]], [[660, 1260]], null]}, {"name": "Chic'O Poil", "address": "52 Av. de la Gare, 01120 Montluel", "category": "Toiletteur", "rating": 4.9, "distance": 7.3, "lat": 45.851329, "lng": 5.056938, "hours": [null, [[540, 750]], [[540, 750]], [[540, 750]], [[540, 750]], [[540, 780]], null]}, {"name": "Ruchi Restaurant Indien", "address": "50 Pl. Carnot, 01120 Montluel", "category": "Restaurant", "rating": 4.7, "distance": 7.3, "lat": 45.852015, "lng": 5.056484, "hours": [[[480, 1320]], [[480, 1320]], [[480, 1320]], [[480, 1320]], [[480, 1320]], [[480, 1320]], [[480, 1320]]]}, {"name": "Nes Resto", "address": "389 Av. de la Gare, 01120 Montluel", "category": "Restaurant", "rating": 4.2, "distance": 7.3, "lat": 45.848379, "lng": 5.057872, "hours": [[[360, 855]], [[360, 855]], [[360, 855]], [[360, 855]], [[360, 855]], [[360, 855]], null]}, {"name": "Bacaro", "address": "43 Pl. Carnot, 01120 Montluel", "category": "Restaurant", "rating": 4.2, "distance": 7.3, "lat": 45.851661, "lng": 5.056769, "hours": [[[480, 1140]], [[480, 1140]], null, [[480, 1140]], [[480, 1140]], [[510, 780]], [[510, 780]]]}, {"name": "LE REMPART", "address": "300 Quai des Remparts, 01120 Montluel", "category": "Restaurant", "rating": 4.6, "distance": 7.3, "lat": 45.85084, "lng": 5.05753, "hours": [null, [[600, 870], [1050, 60]], [[600, 870], [1050, 60]], [[600, 870], [1050, 60]], [[600, 870], [1050, 60]], [[600, 870], [1050, 60]], null]}, {"name": "Big M Montluel Beynost", "address": "74 Grande Rue, 01120 Montluel", "category": "Restaurant", "rating": 4.7, "distance": 7.4, "lat": 45.852002, "lng": 5.058114, "hours": [[[660, 870], [1080, 30]], [[660, 870], [1080, 30]], [[660, 870], [1080, 30]], [[660, 870], [1080, 30]], [[660, 810], [1080, 30]], [[660, 30]], [[660, 30]]]}, {"name": "Indochine", "address": "108 Grande Rue, 01120 Montluel", "category": "Restaurant", "rating": 4.7, "distance": 7.4, "lat": 45.851966, "lng": 5.057741, "hours": [null, null, null, null, null, null, null]}, {"name": "Tchip Coiffure Meyzieu", "address": "41 Rue de la République, 69330 Meyzieu", "category": "Coiffeur", "rating": 4.4, "distance": 7.4, "lat": 45.766905, "lng": 4.999697, "hours": [[[540, 1080]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[480, 1080]], null]}, {"name": "Beauty Touch Coiffure", "address": "2 Pl. Jean Monnet, 69330 Meyzieu", "category": "Coiffeur", "rating": 4.6, "distance": 7.6, "lat": 45.766267, "lng": 5.002745, "hours": [[[540, 1020]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[510, 1020]], null]}, {"name": "L'Hair du Temps", "address": "95 Rue de la République, 69330 Meyzieu", "category": "Coiffeur", "rating": 4.5, "distance": 7.6, "lat": 45.766639, "lng": 5.005105, "hours": [null, [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[480, 1020]], null]}, {"name": "Enjoy coiffure", "address": "95 Rue de la République, 69330 Meyzieu", "category": "Coiffeur", "rating": 4.6, "distance": 7.6, "lat": 45.766641, "lng": 5.005129, "hours": [null, [[570, 720]], [[540, 1140]], null, [[570, 720]], [[540, 1050]], null]}, {"name": "Salon Stella diffusion", "address": "100 Rue de la République, 69330 Meyzieu", "category": "Coiffeur", "rating": 4.3, "distance": 7.9, "lat": 45.764841, "lng": 5.009905, "hours": [[[600, 1080]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[480, 1080]], [[450, 720]]]}, {"name": "Restaurant L'escale", "address": "3 Rte de Lyon, 69740 Genas", "category": "Restaurant", "rating": 4.7, "distance": 10.6, "lat": 45.734882, "lng": 4.982707, "hours": [null, null, null, null, null, null, null]}, {"name": "PARKER restaurant", "address": "350 Rue Antoine Pinay, 69740 Genas", "category": "Restaurant", "rating": 4.3, "distance": 11.1, "lat": 45.730709, "lng": 4.984457, "hours": [null, null, null, null, null, null, null]}, {"name": "Le Bistrot de Genas", "address": "23 Rue de la République, 69740 Genas", "category": "Restaurant", "rating": 5.0, "distance": 11.2, "lat": 45.731916, "lng": 4.999661, "hours": [[[480, 900]], [[480, 900]], [[480, 900]], [[480, 900]], [[480, 900]], null, null]}, {"name": "COTE LE RESTAURANT", "address": "36 Rue Antoine Pinay, 69740 Genas", "category": "Restaurant", "rating": 4.1, "distance": 11.3, "lat": 45.729478, "lng": 4.987805, "hours": [null, null, null, null, null, null, null]}, {"name": "GOURMET DE GENAS", "address": "35 Rue de l'Avenir, 69740 Genas", "category": "Restaurant", "rating": 4.5, "distance": 11.9, "lat": 45.723606, "lng": 4.983929, "hours": [[[690, 840]], [[690, 840]], [[690, 840]], [[690, 840]], [[690, 840]], null, null]}, {"name": "GOÛ", "address": "12 Rue Lionel Terray, 69740 Genas", "category": "Restaurant", "rating": 4.9, "distance": 12.6, "lat": 45.717843, "lng": 4.992851, "hours": [[[690, 840]], [[690, 840]], [[690, 840]], [[690, 840]], [[690, 840]], null, null]}, {"name": "L'essenti'Elles", "address": "19 Rue des Frères Lumière, 69740 Genas", "category": "Restaurant", "rating": 4.5, "distance": 12.9, "lat": 45.714765, "lng": 4.988848, "hours": [[[420, 960]], [[420, 960]], [[420, 960]], [[420, 960]], [[420, 960]], null, null]}, {"name": "Bulle D'air Home", "address": "220 Rte de Lyon, 01600 Trévoux", "category": "Institut de beauté", "rating": 4.9, "distance": 18.1, "lat": 45.93546, "lng": 4.789236, "hours": [[[600, 1020]], [[600, 1080]], [[600, 1080]], [[600, 1080]], [[600, 1080]], [[540, 720]], null]}, {"name": "SD coiffure", "address": "29 Rue du Palais, 01600 Trévoux", "category": "Coiffeur", "rating": 4.6, "distance": 19.1, "lat": 45.940365, "lng": 4.778911, "hours": [null, [[510, 1080]], [[510, 1080]], [[510, 1080]], [[540, 1140]], [[480, 960]], null]}, {"name": "l'hair d'un temps", "address": "6 Rue du Palais, 01600 Trévoux", "category": "Coiffeur", "rating": 4.7, "distance": 19.2, "lat": 45.94029, "lng": 4.777444, "hours": [[[600, 1080]], [[540, 1140]], [[540, 1080]], [[600, 1260]], [[600, 1020]], [[480, 840]], null]}, {"name": "Alémona coiffure", "address": "12 Grande Rue, 01600 Trévoux", "category": "Coiffeur", "rating": 4.7, "distance": 19.3, "lat": 45.940617, "lng": 4.775638, "hours": [null, [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1140]], [[540, 1080]], null]}, {"name": "M.A COIFFURE", "address": "24 Grande Rue, 01600 Trévoux", "category": "Coiffeur", "rating": 4.8, "distance": 19.3, "lat": 45.940719, "lng": 4.775229, "hours": [[[540, 1020]], [[570, 1110]], [[570, 1110]], [[570, 1110]], [[540, 750]], [[540, 1080]], [[540, 780]]]}, {"name": "L'ATELIER DU BARBIER DE TRÉVOUX", "address": "8 Grande Rue, 01600 Trévoux", "category": "Coiffeur", "rating": 4.1, "distance": 19.3, "lat": 45.94061, "lng": 4.775907, "hours": [[[540, 1170]], [[540, 1170]], [[540, 1170]], [[540, 1170]], [[540, 1170]], [[540, 1170]], [[540, 1170]]]}, {"name": "Studio cé", "address": "32 Grande Rue, 01600 Trévoux", "category": "Coiffeur", "rating": 5.0, "distance": 19.4, "lat": 45.940932, "lng": 4.774512, "hours": [null, [[540, 1080]], [[540, 1080]], [[540, 1080]], [[540, 1140]], [[540, 900]], null]}, {"name": "ATOME CROCHU", "address": "115 Rue Beausite, 01600 Trévoux", "category": "Coiffeur", "rating": 5.0, "distance": 19.8, "lat": 45.943375, "lng": 4.771374, "hours": [[[540, 1020]], [[540, 1020]], [[540, 1020]], [[540, 1020]], [[540, 1020]], [[540, 1020]], null]}];
+
 const SEED_CARDS = [
   { name: 'Roxy Brasserie Lounge', order: 0 },
   { name: 'Au moment de partage', order: 1 }
 ];
 
 function genId(prefix){ return prefix + Date.now() + Math.floor(Math.random()*1000); }
-function todayStr(){ return new Date().toISOString().slice(0,10); }
+function todayStr(){
+  const d = new Date();
+  const tzOffsetMs = d.getTimezoneOffset() * 60000;
+  return new Date(d.getTime() - tzOffsetMs).toISOString().slice(0,10);
+}
 function toNum(v){ const n = parseFloat((v||'').toString().replace(',', '.')); return isNaN(n) ? 0 : n; }
 function escapeHtml(str){ const div = document.createElement('div'); div.textContent = str || ''; return div.innerHTML; }
 function fmtDate(d){
@@ -453,6 +921,26 @@ function sortSalesFor(list, mode){
   }
 }
 
+/* ---------- MONTHLY GOAL ---------- */
+const GOAL_KEY = 'avisboost_goal';
+function getMonthlyGoal(){
+  try{ return parseInt(localStorage.getItem(GOAL_KEY) || '0', 10) || 0; }catch(e){ return 0; }
+}
+function setMonthlyGoal(n){ try{ localStorage.setItem(GOAL_KEY, String(n)); }catch(e){} }
+
+document.getElementById('editGoalBtn').addEventListener('click', () => {
+  document.getElementById('goalInput').value = getMonthlyGoal() || '';
+  openSheet(document.getElementById('goalSheet'));
+});
+document.getElementById('goalCancelBtn').addEventListener('click', closeSheets);
+document.getElementById('goalSaveBtn').addEventListener('click', () => {
+  const n = parseInt(document.getElementById('goalInput').value, 10) || 0;
+  setMonthlyGoal(n);
+  renderFinances();
+  closeSheets();
+  showToast('Objectif mis à jour');
+});
+
 /* ---------- TOAST ---------- */
 let toastTimer = null;
 function showToast(msg){
@@ -472,6 +960,7 @@ document.querySelectorAll('.tab-item').forEach(tab => {
     tab.classList.add('active');
     document.getElementById('screen-' + activeView).classList.add('active');
     if(activeView === 'finances') renderFinances();
+    if(activeView === 'prospection') renderProspects();
   });
 });
 
@@ -524,19 +1013,50 @@ document.getElementById('cardsSortBtn').addEventListener('click', () => openSort
 document.getElementById('ordersSortBtn').addEventListener('click', () => openSortSheet('orders'));
 document.getElementById('salesSortBtn').addEventListener('click', () => openSortSheet('sales'));
 
+/* ---------- SHARED: STOCK STATUS (used by Registre + Finances) ---------- */
+function getStockClass(remaining){
+  if(remaining <= 2) return 'danger';
+  if(remaining <= 5) return 'warn';
+  if(remaining >= 10) return 'good';
+  return '';
+}
+function getStockInfo(){
+  const totalOrdered = orders.reduce((sum, o) => sum + toNum(o.qty), 0);
+  if(totalOrdered <= 0) return null;
+  const remaining = totalOrdered - cards.length;
+  return { totalOrdered, remaining, cls: getStockClass(remaining) };
+}
+
 /* ---------- RENDER: CARDS ---------- */
 function renderCards(){
   const list = document.getElementById('cardsList');
 
-  const totalOrdered = orders.reduce((sum, o) => sum + toNum(o.qty), 0);
+  // Review reminder banner: cards installed 14+ days ago, price set (sold), no review confirmed
+  const banner = document.getElementById('reviewReminderBanner');
+  const now = Date.now();
+  const pendingReview = cards.filter(c => {
+    if(c.reviewReceived) return false;
+    if(!c.date) return false;
+    const days = (now - new Date(c.date).getTime()) / 86400000;
+    return days >= 14 && c.active !== false;
+  });
+  if(pendingReview.length > 0){
+    banner.style.display = 'flex';
+    banner.innerHTML = `<span>⏳ ${pendingReview.length} carte${pendingReview.length>1?'s':''} posée${pendingReview.length>1?'s':''} depuis +14 jours sans avis confirmé — pense à relancer</span>`;
+  } else {
+    banner.style.display = 'none';
+  }
+
   const badge = document.getElementById('cardsCountBadge');
-  if(totalOrdered > 0){
-    const remaining = totalOrdered - cards.length;
-    badge.textContent = `${cards.length}/${totalOrdered}`;
-    badge.classList.toggle('warn', remaining <= 2);
-    badge.title = remaining >= 0 ? `${remaining} restante${remaining > 1 ? 's' : ''} à vendre` : 'Plus de cartes enregistrées que commandées';
+  const stock = getStockInfo();
+  if(stock){
+    badge.textContent = `${cards.length}/${stock.totalOrdered}`;
+    badge.classList.remove('warn', 'good', 'danger');
+    if(stock.cls) badge.classList.add(stock.cls);
+    badge.title = stock.remaining >= 0 ? `${stock.remaining} restante${stock.remaining > 1 ? 's' : ''} à vendre` : 'Plus de cartes enregistrées que commandées';
   } else {
     badge.textContent = '';
+    badge.classList.remove('warn', 'good', 'danger');
   }
 
   if(cards.length === 0){
@@ -582,6 +1102,14 @@ function closeSheets(){
   cardSheet.classList.remove('show');
   orderSheet.classList.remove('show');
   document.getElementById('sortSheet').classList.remove('show');
+  document.getElementById('prospectSheet').classList.remove('show');
+  document.getElementById('addProspectSheet').classList.remove('show');
+  document.getElementById('tourCountSheet').classList.remove('show');
+  document.getElementById('tourResultSheet').classList.remove('show');
+  document.getElementById('statsSheet').classList.remove('show');
+  document.getElementById('goalSheet').classList.remove('show');
+  document.getElementById('relanceSheet').classList.remove('show');
+  document.getElementById('themeSheet').classList.remove('show');
 }
 sheetOverlay.addEventListener('click', closeSheets);
 
@@ -598,15 +1126,61 @@ function openCardSheet(id){
 
   const deleteRow = document.getElementById('cardDeleteBtn').parentElement;
   const toggleBtn = document.getElementById('cardToggleBtn');
+  const reviewBtn = document.getElementById('cardReviewBtn');
+  const relanceBtn = document.getElementById('cardRelanceBtn');
   if(card){
     deleteRow.style.display = 'flex';
     toggleBtn.textContent = card.active === false ? 'Réactiver' : 'Marquer inactive';
+    reviewBtn.style.display = 'block';
+    reviewBtn.textContent = card.reviewReceived ? '✅ Avis reçu' : '⏳ Avis non reçu';
+    reviewBtn.classList.toggle('btn-secondary', true);
+    relanceBtn.style.display = 'block';
   } else {
     deleteRow.style.display = 'none';
+    reviewBtn.style.display = 'none';
+    relanceBtn.style.display = 'none';
   }
 
   openSheet(cardSheet);
 }
+
+document.getElementById('cardReviewBtn').addEventListener('click', () => {
+  if(!editingCardId) return;
+  const card = cards.find(c => c.id === editingCardId);
+  if(!card) return;
+  card.reviewReceived = !card.reviewReceived;
+  persistCards();
+  renderCards();
+  document.getElementById('cardReviewBtn').textContent = card.reviewReceived ? '✅ Avis reçu' : '⏳ Avis non reçu';
+  showToast(card.reviewReceived ? 'Avis marqué comme reçu' : 'Avis marqué comme non reçu');
+});
+
+/* ---------- RELANCE MESSAGE GENERATOR ---------- */
+function buildRelanceMessage(card){
+  const name = card.name || 'bonjour';
+  const link = card.link ? `\n\n👉 ${card.link}` : '';
+  return `Bonjour ${name}, j'espère que la carte avis Google installée chez vous donne satisfaction ! N'hésitez pas si besoin d'aide pour la faire scanner par vos clients 🙂${link}`;
+}
+document.getElementById('cardRelanceBtn').addEventListener('click', () => {
+  if(!editingCardId) return;
+  const card = cards.find(c => c.id === editingCardId);
+  if(!card) return;
+  document.getElementById('relanceText').value = buildRelanceMessage(card);
+  openSheet(document.getElementById('relanceSheet'));
+});
+document.getElementById('relanceCloseBtn').addEventListener('click', closeSheets);
+document.getElementById('relanceCopyBtn').addEventListener('click', () => {
+  const text = document.getElementById('relanceText').value;
+  navigator.clipboard?.writeText(text).then(() => showToast('Message copié')).catch(() => showToast('Impossible de copier'));
+});
+document.getElementById('relanceWhatsappBtn').addEventListener('click', () => {
+  const text = document.getElementById('relanceText').value;
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+});
+document.getElementById('relanceSmsBtn').addEventListener('click', () => {
+  const text = document.getElementById('relanceText').value;
+  window.location.href = 'sms:?&body=' + encodeURIComponent(text);
+});
 
 document.getElementById('cardCancelBtn').addEventListener('click', closeSheets);
 
@@ -621,13 +1195,24 @@ document.getElementById('cardSaveBtn').addEventListener('click', () => {
 
   if(editingCardId){
     const card = cards.find(c => c.id === editingCardId);
-    if(card){ card.name = name; card.link = link; card.price = price; card.date = date; card.ref = ref; }
+    if(card){
+      card.name = name; card.link = link; card.date = date; card.ref = ref;
+      // Track the real sale date the first time a price is set, independent of the (editable) install date
+      if(price && !card.price) card.soldAt = todayStr();
+      if(!price) card.soldAt = null;
+      card.price = price;
+    }
   } else {
     const maxOrder = cards.reduce((m, c) => Math.max(m, c.order ?? 0), -1);
-    cards.push({ id: genId('c'), name, link, price, ref, date: date || todayStr(), active: true, order: maxOrder + 1, createdAt: Date.now() });
+    cards.push({
+      id: genId('c'), name, link, price, ref, date: date || todayStr(),
+      soldAt: price ? todayStr() : null,
+      active: true, order: maxOrder + 1, createdAt: Date.now()
+    });
   }
   persistCards();
   renderCards();
+  renderFinances();
   closeSheets();
   showToast('Carte enregistrée');
 });
@@ -639,6 +1224,7 @@ document.getElementById('cardToggleBtn').addEventListener('click', () => {
   card.active = card.active === false ? true : false;
   persistCards();
   renderCards();
+  renderFinances();
   closeSheets();
   showToast(card.active === false ? 'Carte marquée inactive' : 'Carte réactivée');
 });
@@ -649,11 +1235,28 @@ document.getElementById('cardDeleteBtn').addEventListener('click', () => {
   cards = cards.filter(c => c.id !== editingCardId);
   persistCards();
   renderCards();
+  renderFinances();
   closeSheets();
   showToast('Carte supprimée');
 });
 
 /* ---------- ORDER SHEET ---------- */
+let editingOrderId = null;
+
+function openOrderSheet(id){
+  editingOrderId = id || null;
+  const order = id ? orders.find(o => o.id === id) : null;
+
+  document.getElementById('orderSheetTitle').textContent = order ? 'Modifier la commande' : 'Nouvelle commande de cartes';
+  document.getElementById('oDate').value = order ? order.date || '' : todayStr();
+  document.getElementById('oAmount').value = order ? order.amount || '' : '';
+  document.getElementById('oQty').value = order ? order.qty || '' : '';
+
+  document.getElementById('orderDeleteRow').style.display = order ? 'flex' : 'none';
+
+  openSheet(orderSheet);
+}
+
 document.getElementById('orderCancelBtn').addEventListener('click', closeSheets);
 
 document.getElementById('orderSaveBtn').addEventListener('click', () => {
@@ -663,7 +1266,12 @@ document.getElementById('orderSaveBtn').addEventListener('click', () => {
 
   if(!amount && !qty){ showToast('Renseigne un montant ou une quantité'); return; }
 
-  orders.unshift({ id: genId('o'), date, amount, qty, createdAt: Date.now() });
+  if(editingOrderId){
+    const order = orders.find(o => o.id === editingOrderId);
+    if(order){ order.date = date; order.amount = amount; order.qty = qty; }
+  } else {
+    orders.unshift({ id: genId('o'), date, amount, qty, createdAt: Date.now() });
+  }
   persistOrders();
   renderFinances();
   renderCards();
@@ -671,7 +1279,18 @@ document.getElementById('orderSaveBtn').addEventListener('click', () => {
   document.getElementById('oDate').value = '';
   document.getElementById('oAmount').value = '';
   document.getElementById('oQty').value = '';
-  showToast('Commande enregistrée');
+  showToast(editingOrderId ? 'Commande modifiée' : 'Commande enregistrée');
+});
+
+document.getElementById('orderDeleteBtn').addEventListener('click', () => {
+  if(!editingOrderId) return;
+  if(!confirm('Supprimer cette commande ?')) return;
+  orders = orders.filter(o => o.id !== editingOrderId);
+  persistOrders();
+  renderFinances();
+  renderCards();
+  closeSheets();
+  showToast('Commande supprimée');
 });
 
 /* ---------- FAB ---------- */
@@ -679,13 +1298,51 @@ document.getElementById('fabBtn').addEventListener('click', () => {
   if(activeView === 'registre'){
     document.getElementById('fDate').value = todayStr();
     openCardSheet(null);
-  } else {
-    document.getElementById('oDate').value = todayStr();
-    openSheet(orderSheet);
+  } else if(activeView === 'finances'){
+    openOrderSheet(null);
+  } else if(activeView === 'prospection'){
+    openSheet(addProspectSheet);
   }
 });
 
 /* ---------- FINANCES RENDER ---------- */
+/* ---------- MONTHLY EVOLUTION CHART ---------- */
+function renderDonutChart(totalRevenue, totalCost){
+  const el = document.getElementById('donutContent');
+  if(!el) return;
+
+  if(totalRevenue <= 0){
+    el.innerHTML = `<div class="empty-state"><div class="em-title">Pas encore de CA</div><div class="em-sub">Enregistre une vente pour voir la répartition.</div></div>`;
+    return;
+  }
+
+  const ratio = Math.min(1, totalCost / totalRevenue);
+  const over = totalCost > totalRevenue;
+  const R = 50, C = 2 * Math.PI * R;
+  const dash = ratio * C;
+  const profit = totalRevenue - totalCost;
+
+  el.innerHTML = `
+    <div class="donut-row">
+      <div class="donut-wrap">
+        <svg viewBox="0 0 120 120" class="donut-svg">
+          <circle class="donut-bg" cx="60" cy="60" r="${R}"></circle>
+          <circle class="donut-fg" cx="60" cy="60" r="${R}" stroke-dasharray="${dash.toFixed(1)} ${C.toFixed(1)}"></circle>
+        </svg>
+        <div class="donut-center">
+          <div class="donut-pct ${over ? 'over' : ''}">${Math.round(ratio*100)}%</div>
+          <div class="donut-label">dépensé</div>
+        </div>
+      </div>
+      <div class="donut-legend">
+        <div class="donut-legend-row"><i class="dot cost"></i>Dépenses <b>${totalCost.toFixed(2)}€</b></div>
+        <div class="donut-legend-row"><i class="dot rev"></i>${over ? 'Perte' : 'Bénéfice'} <b>${profit >= 0 ? '+' : ''}${profit.toFixed(2)}€</b></div>
+        <div class="donut-legend-row" style="opacity:0.7;">CA total <b>${totalRevenue.toFixed(2)}€</b></div>
+      </div>
+    </div>
+  `;
+}
+
 function renderFinances(){
   let totalRevenue = 0, soldCount = 0;
   cards.forEach(c => { if(c.price){ totalRevenue += toNum(c.price); soldCount++; } });
@@ -695,6 +1352,21 @@ function renderFinances(){
 
   const profit = totalRevenue - totalCost;
 
+  // Monthly goal
+  const monthKey = todayStr().slice(0,7);
+  const soldThisMonth = cards.filter(c => c.price && (c.soldAt || c.date) && (c.soldAt || c.date).slice(0,7) === monthKey).length;
+  const goal = getMonthlyGoal();
+  const goalFill = document.getElementById('goalBarFill');
+  const goalSub = document.getElementById('goalSubLabel');
+  if(goal > 0){
+    const pct = Math.min(100, Math.round((soldThisMonth / goal) * 100));
+    goalFill.style.width = pct + '%';
+    goalSub.textContent = `${soldThisMonth} / ${goal} cartes vendues ce mois (${pct}%)`;
+  } else {
+    goalFill.style.width = '0%';
+    goalSub.textContent = 'Aucun objectif défini — appuie sur "Modifier"';
+  }
+
   document.getElementById('statCost').textContent = totalCost.toFixed(2) + ' €';
   document.getElementById('statRevenue').textContent = totalRevenue.toFixed(2) + ' €';
   document.getElementById('statOrderedCount').textContent = orderedCount;
@@ -703,6 +1375,27 @@ function renderFinances(){
   profitEl.textContent = (profit >= 0 ? '+' : '') + profit.toFixed(2) + ' €';
   profitEl.classList.toggle('neg', profit < 0);
 
+  // Average margin per sold card = avg sale price - avg cost per unit ordered
+  const avgCostPerUnit = orderedCount > 0 ? totalCost / orderedCount : 0;
+  const avgMargin = soldCount > 0 ? (totalRevenue / soldCount) - avgCostPerUnit : 0;
+  const marginEl = document.getElementById('statAvgMargin');
+  marginEl.textContent = (avgMargin >= 0 ? '+' : '') + avgMargin.toFixed(2) + ' €';
+  marginEl.classList.toggle('neg', avgMargin < 0);
+
+  // Stock remaining tile — mirrors the Registre badge color logic
+  const stockEl = document.getElementById('statStockRemaining');
+  const stock = getStockInfo();
+  stockEl.classList.remove('warn', 'good', 'danger');
+  if(stock){
+    stockEl.textContent = stock.remaining;
+    if(stock.cls) stockEl.classList.add(stock.cls);
+    stockEl.title = stock.remaining >= 0 ? `${stock.remaining} carte${stock.remaining > 1 ? 's' : ''} restante${stock.remaining > 1 ? 's' : ''}` : 'Plus de cartes enregistrées que commandées';
+  } else {
+    stockEl.textContent = '—';
+    stockEl.title = 'Ajoute une commande pour suivre ton stock';
+  }
+
+  renderDonutChart(totalRevenue, totalCost);
   const orderList = document.getElementById('orderList');
   if(orders.length === 0){
     orderList.innerHTML = `<div class="empty-state"><div class="em-title">Aucune commande</div><div class="em-sub">Appuie sur + pour ajouter ta première commande de cartes.</div></div>`;
@@ -715,18 +1408,11 @@ function renderFinances(){
           <div class="row-sub"><span>${toNum(o.qty)} carte${toNum(o.qty) > 1 ? 's' : ''} commandée${toNum(o.qty) > 1 ? 's' : ''}</span></div>
         </div>
         <div class="row-price">${toNum(o.amount).toFixed(2)}€</div>
+        <div class="row-chevron">›</div>
       </div>
     `).join('');
     orderList.querySelectorAll('.row').forEach(row => {
-      row.addEventListener('click', () => {
-        const id = row.dataset.id;
-        if(!confirm('Supprimer cette commande ?')) return;
-        orders = orders.filter(o => o.id !== id);
-        persistOrders();
-        renderFinances();
-        renderCards();
-        showToast('Commande supprimée');
-      });
+      row.addEventListener('click', () => openOrderSheet(row.dataset.id));
     });
   }
 
@@ -753,7 +1439,14 @@ function renderFinances(){
 
 /* ---------- EXPORT / IMPORT ---------- */
 document.getElementById('exportBtn').addEventListener('click', () => {
-  const data = { cards, orders, exportedAt: new Date().toISOString() };
+  const seedIds = new Set(PROSPECTS_SEED.map(p => slugify(p.name, p.address)));
+  const extraProspects = prospects.filter(p => !seedIds.has(p.id));
+  const data = {
+    cards, orders,
+    extraProspects, prospectStatus,
+    monthlyGoal: getMonthlyGoal(),
+    exportedAt: new Date().toISOString()
+  };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -778,8 +1471,22 @@ document.getElementById('importFile').addEventListener('change', (e) => {
       orders = Array.isArray(data.orders) ? data.orders : [];
       persistCards();
       persistOrders();
+      if(Array.isArray(data.extraProspects)){
+        const seedIds = new Set(PROSPECTS_SEED.map(p => slugify(p.name, p.address)));
+        const seedWithIds = PROSPECTS_SEED.map(p => ({ ...p, id: slugify(p.name, p.address) }));
+        prospects = seedWithIds.concat(data.extraProspects.filter(p => !seedIds.has(p.id)));
+        persistExtraProspects();
+      }
+      if(data.prospectStatus && typeof data.prospectStatus === 'object'){
+        prospectStatus = data.prospectStatus;
+        persistProspectStatus();
+      }
+      if(typeof data.monthlyGoal === 'number'){
+        setMonthlyGoal(data.monthlyGoal);
+      }
       renderCards();
       renderFinances();
+      renderProspects();
       showToast('Import réussi');
     }catch(err){
       showToast('Fichier invalide');
@@ -789,9 +1496,668 @@ document.getElementById('importFile').addEventListener('change', (e) => {
   e.target.value = '';
 });
 
+/* ---------- PROSPECTION: STORAGE ---------- */
+function slugify(name, address){
+  return (name + '|' + address).toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,80);
+}
+function loadProspects(){
+  try{
+    const raw = localStorage.getItem(PROSPECTS_KEY);
+    const extra = raw ? JSON.parse(raw) : [];
+    const seedWithIds = PROSPECTS_SEED.map(p => ({ ...p, id: slugify(p.name, p.address) }));
+    const extraIds = new Set(extra.map(p => p.id));
+    prospects = seedWithIds.concat(extra.filter(p => !seedWithIds.some(s => s.id === p.id)));
+  }catch(e){ prospects = PROSPECTS_SEED.map(p => ({ ...p, id: slugify(p.name, p.address) })); }
+}
+function persistExtraProspects(){
+  const seedIds = new Set(PROSPECTS_SEED.map(p => slugify(p.name, p.address)));
+  const extra = prospects.filter(p => !seedIds.has(p.id));
+  try{ localStorage.setItem(PROSPECTS_KEY, JSON.stringify(extra)); }catch(e){}
+}
+function loadProspectStatus(){
+  try{
+    const raw = localStorage.getItem(PROSPECT_STATUS_KEY);
+    prospectStatus = raw ? JSON.parse(raw) : {};
+  }catch(e){ prospectStatus = {}; }
+}
+function persistProspectStatus(){ try{ localStorage.setItem(PROSPECT_STATUS_KEY, JSON.stringify(prospectStatus)); }catch(e){} }
+
+/* ---------- PROSPECTION: RADIUS CHIPS ---------- */
+const RADIUS_OPTIONS = [
+  { value: 5, label: '≤ 5 km' },
+  { value: 10, label: '≤ 10 km' },
+  { value: 15, label: '≤ 15 km' },
+  { value: 20, label: '≤ 20 km' },
+  { value: 'all', label: 'Tous' }
+];
+function renderRadiusChips(){
+  const el = document.getElementById('radiusChips');
+  el.innerHTML = RADIUS_OPTIONS.map(o => `
+    <button class="chip ${radiusFilter === o.value ? 'active' : ''}" data-value="${o.value}">${o.label}</button>
+  `).join('');
+  el.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const v = chip.dataset.value;
+      radiusFilter = v === 'all' ? 'all' : Number(v);
+      renderRadiusChips();
+      renderProspects();
+    });
+  });
+}
+
+/* ---------- PROSPECTION: SORT ---------- */
+const PROSPECT_SORT_OPTIONS = [
+  { value: 'distance-asc', label: 'Distance : proche → loin' },
+  { value: 'distance-desc', label: 'Distance : loin → proche' },
+  { value: 'name-asc', label: 'Nom (A → Z)' },
+  { value: 'status', label: 'Statut' },
+  { value: 'followup-asc', label: 'Date de relance' }
+];
+function statusRank(s){ return { later: 0, todo: 1, yes: 2, no: 3 }[s || 'todo'] ?? 1; }
+function sortProspectsFor(list, mode){
+  const arr = [...list];
+  switch(mode){
+    case 'distance-desc': return arr.sort((a,b) => (b.distance ?? 999) - (a.distance ?? 999));
+    case 'name-asc': return arr.sort((a,b) => a.name.localeCompare(b.name));
+    case 'status': return arr.sort((a,b) => statusRank((prospectStatus[a.id]||{}).status) - statusRank((prospectStatus[b.id]||{}).status));
+    case 'followup-asc': return arr.sort((a,b) => {
+      const fa = (prospectStatus[a.id]||{}).followUpDate || '9999-99-99';
+      const fb = (prospectStatus[b.id]||{}).followUpDate || '9999-99-99';
+      return fa.localeCompare(fb);
+    });
+    default: return arr.sort((a,b) => (a.distance ?? 999) - (b.distance ?? 999));
+  }
+}
+
+/* ---------- PROSPECTION: HOURS ---------- */
+const DAY_LABELS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+const DAY_LABELS_FULL = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+
+function jsDayToIdx(jsDay){ return jsDay === 0 ? 6 : jsDay - 1; } // JS: 0=Sun -> our 0=Mon..6=Sun
+
+function minutesNow(){
+  const d = new Date();
+  return d.getHours()*60 + d.getMinutes();
+}
+function fmtMinutes(m){
+  const h = Math.floor(m/60), mi = m%60;
+  return String(h).padStart(2,'0') + 'h' + String(mi).padStart(2,'0');
+}
+function dayRangesLabel(ranges){
+  if(!ranges || ranges.length === 0) return 'Fermé';
+  return ranges.map(r => fmtMinutes(r[0]) + '–' + fmtMinutes(r[1])).join(', ');
+}
+function openStatus(hours){
+  // returns { state: 'open'|'closed'|'unknown', label }
+  if(!hours) return { state: 'unknown', label: 'Horaires inconnues' };
+  const idx = jsDayToIdx(new Date().getDay());
+  const ranges = hours[idx];
+  const now = minutesNow();
+  if(!ranges || ranges.length === 0) return { state: 'closed', label: 'Fermé aujourd\'hui' };
+  for(const [s,e] of ranges){
+    if(now >= s && now <= e) return { state: 'open', label: 'Ouvert · ferme à ' + fmtMinutes(e) };
+  }
+  // find next opening today
+  const next = ranges.find(r => r[0] > now);
+  if(next) return { state: 'closed', label: 'Fermé · ouvre à ' + fmtMinutes(next[0]) };
+  return { state: 'closed', label: 'Fermé pour aujourd\'hui' };
+}
+function isOpenAtCheck(hours){ return hours ? openStatus(hours).state === 'open' : null; }
+
+/* ---------- PROSPECTION: WAZE ---------- */
+function openWaze(address, name){
+  const query = encodeURIComponent(address || name || '');
+  const url = `https://waze.com/ul?q=${query}&navigate=yes`;
+  window.open(url, '_blank');
+}
+function openStreetView(p){
+  const url = p.lat != null && p.lng != null
+    ? `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${p.lat},${p.lng}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.address || p.name || '')}`;
+  window.open(url, '_blank');
+}
+
+/* ---------- PROSPECTION: RENDER ---------- */
+function renderProspects(){
+  const list = document.getElementById('prospectsList');
+  const badge = document.getElementById('prospectsCountBadge');
+
+  renderDueTodayBanner();
+
+  let filtered = prospects;
+  if(radiusFilter !== 'all'){
+    filtered = prospects.filter(p => (p.distance ?? 0) <= radiusFilter);
+  }
+  if(filterDueTodayOnly){
+    const today = todayStr();
+    filtered = filtered.filter(p => {
+      const st = prospectStatus[p.id];
+      return st && st.status === 'later' && st.followUpDate && st.followUpDate <= today;
+    });
+  }
+  badge.textContent = filtered.length;
+
+  if(filtered.length === 0){
+    list.innerHTML = `<div class="empty-state"><div class="em-title">Aucun commerce</div><div class="em-sub">Essaie un rayon plus large ou ajoute un prospect manuellement.</div></div>`;
+    return;
+  }
+
+  const display = sortProspectsFor(filtered, prospectSort);
+  const STATUS_LABEL = { todo: 'À faire', yes: 'Oui', no: 'Non', later: 'À repasser' };
+
+  list.innerHTML = display.map(p => {
+    const st = prospectStatus[p.id] || { status: 'todo' };
+    const statusClass = st.status || 'todo';
+    const followUp = st.followUpDate ? ` · relance ${fmtDate(st.followUpDate)}` : '';
+    const os = openStatus(p.hours);
+    const openBadge = `<span class="open-badge ${os.state}">${os.state === 'open' ? '● Ouvert' : os.state === 'closed' ? '● Fermé' : ''}</span>`;
+    const isSelected = selectedProspectIds.has(p.id);
+    const leftEl = selectMode
+      ? `<div class="select-checkbox ${isSelected ? 'checked' : ''}" data-select-id="${p.id}">${isSelected ? '✓' : ''}</div>`
+      : `<div class="status-dot ${statusClass}"></div>`;
+    return `
+      <div class="row" data-id="${p.id}">
+        ${leftEl}
+        <div class="row-main">
+          <div class="row-title">${escapeHtml(p.name)}</div>
+          <div class="row-sub">
+            <span class="tag">${escapeHtml(p.category || '')}</span>
+            <span>${p.distance != null ? p.distance + ' km' : ''}${followUp}</span>
+            ${openBadge}
+          </div>
+        </div>
+        ${selectMode ? '' : `<div class="status-pill ${statusClass}">${STATUS_LABEL[statusClass]}</div>
+        <button class="sv-btn" data-sv-id="${p.id}" title="Street View">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </button>
+        <button class="waze-btn" data-waze-id="${p.id}" title="Itinéraire Waze">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.4"/></svg>
+        </button>
+        <div class="row-chevron">›</div>`}
+      </div>
+    `;
+  }).join('');
+
+  list.querySelectorAll('.row').forEach(row => {
+    row.addEventListener('click', () => {
+      if(selectMode){
+        toggleProspectSelection(row.dataset.id);
+      } else {
+        openProspectSheet(row.dataset.id);
+      }
+    });
+  });
+  list.querySelectorAll('.waze-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const p = prospects.find(x => x.id === btn.dataset.wazeId);
+      if(p) openWaze(p.address, p.name);
+    });
+  });
+  list.querySelectorAll('.sv-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const p = prospects.find(x => x.id === btn.dataset.svId);
+      if(p) openStreetView(p);
+    });
+  });
+  updateSelectionBar();
+}
+
+function toggleProspectSelection(id){
+  if(selectedProspectIds.has(id)) selectedProspectIds.delete(id);
+  else selectedProspectIds.add(id);
+  renderProspects();
+}
+function updateSelectionBar(){
+  const bar = document.getElementById('selectionBar');
+  if(!selectMode || selectedProspectIds.size === 0){ bar.style.display = 'none'; return; }
+  bar.style.display = 'flex';
+  document.getElementById('selectionCount').textContent = `${selectedProspectIds.size} sélectionné${selectedProspectIds.size > 1 ? 's' : ''}`;
+}
+document.getElementById('selectModeBtn').addEventListener('click', (e) => {
+  selectMode = !selectMode;
+  e.currentTarget.classList.toggle('active', selectMode);
+  if(!selectMode) selectedProspectIds.clear();
+  renderProspects();
+});
+document.getElementById('selectionGoBtn').addEventListener('click', () => {
+  const chosen = prospects.filter(p => selectedProspectIds.has(p.id));
+  if(chosen.length === 0) return;
+  buildAndShowTour(chosen);
+});
+
+document.getElementById('prospectsSortBtn').addEventListener('click', () => {
+  const list = document.getElementById('sortOptionsList');
+  list.innerHTML = PROSPECT_SORT_OPTIONS.map(o => `
+    <div class="row sort-option" data-value="${o.value}">
+      <div class="row-main"><div class="row-title">${o.label}</div></div>
+      ${o.value === prospectSort ? '<div class="row-chevron">✓</div>' : ''}
+    </div>
+  `).join('');
+  list.querySelectorAll('.sort-option').forEach(el => {
+    el.addEventListener('click', () => {
+      prospectSort = el.dataset.value;
+      renderProspects();
+      closeSheets();
+    });
+  });
+  openSheet(document.getElementById('sortSheet'));
+});
+
+/* ---------- PROSPECTION: DETAIL SHEET ---------- */
+const prospectSheet = document.getElementById('prospectSheet');
+let currentProspectStatusChoice = 'todo';
+
+function openProspectSheet(id){
+  editingProspectId = id;
+  const p = prospects.find(x => x.id === id);
+  if(!p) return;
+  const st = prospectStatus[id] || { status: 'todo', followUpDate: '', note: '', history: [], photo: null };
+
+  document.getElementById('prospectSheetTitle').textContent = p.name;
+  document.getElementById('prospectSheetSub').innerHTML =
+    `<span class="tag">${escapeHtml(p.category || '')}</span><span>${p.distance != null ? p.distance + ' km · ' : ''}${escapeHtml(p.address || '')}</span>`;
+
+  const hoursEl = document.getElementById('prospectHoursTable');
+  if(p.hours){
+    const todayIdx = jsDayToIdx(new Date().getDay());
+    hoursEl.innerHTML = DAY_LABELS_FULL.map((label, i) => `
+      <div class="hours-row ${i === todayIdx ? 'today' : ''}">
+        <span class="hd">${label}</span><span>${dayRangesLabel(p.hours[i])}</span>
+      </div>
+    `).join('');
+    hoursEl.style.display = 'block';
+  } else {
+    hoursEl.innerHTML = '';
+    hoursEl.style.display = 'none';
+  }
+
+  // Photo
+  const thumb = document.getElementById('prospectPhotoThumb');
+  if(st.photo){ thumb.src = st.photo; thumb.style.display = 'block'; }
+  else { thumb.style.display = 'none'; thumb.src = ''; }
+
+  // History
+  const histBox = document.getElementById('prospectHistoryBox');
+  if(st.history && st.history.length){
+    const STATUS_LABEL = { todo: 'À faire', yes: 'Oui', no: 'Non', later: 'À repasser' };
+    histBox.innerHTML = '<div class="hours-row today"><span class="hd">Historique</span><span></span></div>' +
+      [...st.history].reverse().map(h => `
+        <div class="history-entry"><span class="hd">${fmtDate(h.date)}</span><span>${STATUS_LABEL[h.status] || h.status}${h.note ? ' — ' + escapeHtml(h.note) : ''}</span></div>
+      `).join('');
+    histBox.style.display = 'block';
+  } else {
+    histBox.innerHTML = '';
+    histBox.style.display = 'none';
+  }
+
+  document.getElementById('prospectNote').value = st.note || '';
+  document.getElementById('prospectFollowUpDate').value = st.followUpDate || '';
+
+  currentProspectStatusChoice = st.status || 'todo';
+  updateStatusChoiceUI();
+
+  document.getElementById('prospectWazeBtn').onclick = () => openWaze(p.address, p.name);
+  document.getElementById('prospectStreetViewBtn').onclick = () => openStreetView(p);
+
+  openSheet(prospectSheet);
+}
+
+function updateStatusChoiceUI(){
+  document.querySelectorAll('.status-choice').forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.status === currentProspectStatusChoice);
+  });
+  document.getElementById('prospectFollowUpField').style.display = currentProspectStatusChoice === 'later' ? 'block' : 'none';
+}
+
+document.querySelectorAll('.status-choice').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentProspectStatusChoice = btn.dataset.status;
+    updateStatusChoiceUI();
+  });
+});
+
+document.getElementById('prospectCancelBtn').addEventListener('click', closeSheets);
+
+/* Photo capture */
+let pendingProspectPhoto = undefined; // undefined = unchanged, null = removed, dataURL = new
+document.getElementById('prospectPhotoBtn').addEventListener('click', () => {
+  document.getElementById('prospectPhotoInput').click();
+});
+document.getElementById('prospectPhotoInput').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    pendingProspectPhoto = evt.target.result;
+    const thumb = document.getElementById('prospectPhotoThumb');
+    thumb.src = pendingProspectPhoto;
+    thumb.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+});
+
+document.getElementById('prospectSaveBtn').addEventListener('click', () => {
+  if(!editingProspectId) return;
+  const note = document.getElementById('prospectNote').value.trim();
+  const followUpDate = document.getElementById('prospectFollowUpDate').value;
+  const prev = prospectStatus[editingProspectId] || { history: [] };
+  const history = prev.history ? [...prev.history] : [];
+  history.push({ date: todayStr(), status: currentProspectStatusChoice, note });
+  const photo = pendingProspectPhoto !== undefined ? pendingProspectPhoto : (prev.photo || null);
+  prospectStatus[editingProspectId] = {
+    status: currentProspectStatusChoice,
+    followUpDate: currentProspectStatusChoice === 'later' ? followUpDate : '',
+    note, history, photo
+  };
+  pendingProspectPhoto = undefined;
+  persistProspectStatus();
+  renderProspects();
+  renderDueTodayBanner();
+  closeSheets();
+  showToast('Statut enregistré');
+});
+
+/* ---------- PROSPECTION: ADD MANUAL ---------- */
+const addProspectSheet = document.getElementById('addProspectSheet');
+document.getElementById('addProspectCancelBtn').addEventListener('click', closeSheets);
+document.getElementById('addProspectSaveBtn').addEventListener('click', () => {
+  const name = document.getElementById('pName').value.trim();
+  const address = document.getElementById('pAddress').value.trim();
+  const category = document.getElementById('pCategory').value.trim();
+  const distance = document.getElementById('pDistance').value.trim();
+  if(!name){ showToast('Renseigne au moins un nom'); return; }
+  const id = slugify(name, address) + '-' + genId('');
+  prospects.push({ id, name, address, category, distance: distance ? toNum(distance) : null, rating: null });
+  persistExtraProspects();
+  renderProspects();
+  closeSheets();
+  document.getElementById('pName').value = '';
+  document.getElementById('pAddress').value = '';
+  document.getElementById('pCategory').value = '';
+  document.getElementById('pDistance').value = '';
+  showToast('Prospect ajouté');
+});
+
+/* ---------- PROSPECTION: TOUR / ROUTE OPTIMIZATION ---------- */
+function haversineKm(lat1, lng1, lat2, lng2){
+  const R = 6371;
+  const toRad = d => d * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLng/2)**2;
+  return R * 2 * Math.asin(Math.sqrt(a));
+}
+function getUserPosition(){
+  return new Promise((resolve) => {
+    if(!navigator.geolocation){ resolve(null); return; }
+    navigator.geolocation.getCurrentPosition(
+      pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      () => resolve(null),
+      { timeout: 4000 }
+    );
+  });
+}
+function nearestNeighborOrder(startLat, startLng, items){
+  const remaining = [...items];
+  const ordered = [];
+  let curLat = startLat, curLng = startLng;
+  while(remaining.length){
+    let bestIdx = 0, bestDist = Infinity;
+    remaining.forEach((it, i) => {
+      if(it.lat == null || it.lng == null) return;
+      const d = haversineKm(curLat, curLng, it.lat, it.lng);
+      if(d < bestDist){ bestDist = d; bestIdx = i; }
+    });
+    const next = remaining.splice(bestIdx, 1)[0];
+    ordered.push(next);
+    if(next.lat != null && next.lng != null){ curLat = next.lat; curLng = next.lng; }
+  }
+  return ordered;
+}
+
+async function buildAndShowTour(chosenList){
+  showToast('Calcul de la tournée…');
+  const pos = await getUserPosition();
+  userGeoPos = pos;
+  const startLat = pos ? pos.lat : CENTER_LAT, startLng = pos ? pos.lng : CENTER_LNG;
+  const ordered = nearestNeighborOrder(startLat, startLng, chosenList);
+  renderTourResult(ordered);
+  openSheet(document.getElementById('tourResultSheet'));
+}
+
+function renderTourResult(orderedList){
+  const el = document.getElementById('tourStopsList');
+  el.innerHTML = orderedList.map((p, i) => {
+    const os = openStatus(p.hours);
+    const badge = `<span class="open-badge ${os.state}">${os.label}</span>`;
+    return `
+      <div class="tour-stop">
+        <div class="tour-num">${i+1}</div>
+        <div class="row-main">
+          <div class="row-title">${escapeHtml(p.name)}</div>
+          <div class="row-sub"><span class="tag">${escapeHtml(p.category||'')}</span>${badge}</div>
+        </div>
+        <button class="waze-btn" data-waze-id="${p.id}" title="Itinéraire Waze">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.4"/></svg>
+        </button>
+      </div>
+    `;
+  }).join('');
+  el.querySelectorAll('.waze-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const p = orderedList.find(x => x.id === btn.dataset.wazeId);
+      if(p) openWaze(p.address, p.name);
+    });
+  });
+}
+
+document.getElementById('tourResultCloseBtn').addEventListener('click', closeSheets);
+
+/* ---------- AUTO TOUR (smart pick) ---------- */
+document.getElementById('autoTourBtn').addEventListener('click', () => {
+  openSheet(document.getElementById('tourCountSheet'));
+});
+document.getElementById('tourCountCancelBtn').addEventListener('click', closeSheets);
+
+document.querySelectorAll('.tour-chip').forEach(chip => {
+  chip.addEventListener('click', async () => {
+    const n = Number(chip.dataset.n);
+    closeSheets();
+
+    // candidates: not marked yes/no
+    let candidates = prospects.filter(p => {
+      const st = (prospectStatus[p.id] || {}).status || 'todo';
+      return st === 'todo' || st === 'later';
+    });
+
+    // split into open-now vs rest, prefer open-now
+    const openNow = candidates.filter(p => isOpenAtCheck(p.hours) === true);
+    const unknownOrClosed = candidates.filter(p => isOpenAtCheck(p.hours) !== true);
+
+    // sort each group by distance from Miribel center as a first pass
+    openNow.sort((a,b) => (a.distance??999) - (b.distance??999));
+    unknownOrClosed.sort((a,b) => (a.distance??999) - (b.distance??999));
+
+    let chosen = openNow.slice(0, n);
+    if(chosen.length < n){
+      chosen = chosen.concat(unknownOrClosed.slice(0, n - chosen.length));
+    }
+
+    if(chosen.length === 0){
+      showToast('Aucun prospect disponible pour une tournée');
+      return;
+    }
+
+    await buildAndShowTour(chosen);
+  });
+});
+
+/* ---------- PROSPECTION: DUE TODAY BANNER ---------- */
+let filterDueTodayOnly = false;
+function renderDueTodayBanner(){
+  const banner = document.getElementById('dueTodayBanner');
+  const today = todayStr();
+  const due = prospects.filter(p => {
+    const st = prospectStatus[p.id];
+    return st && st.status === 'later' && st.followUpDate && st.followUpDate <= today;
+  });
+  if(due.length === 0){
+    banner.style.display = 'none';
+    filterDueTodayOnly = false;
+    return;
+  }
+  banner.style.display = 'flex';
+  banner.classList.add('blue');
+  banner.innerHTML = `<span>🔔 ${due.length} relance${due.length>1?'s':''} prévue${due.length>1?'s':''} aujourd'hui</span><span class="banner-arrow">${filterDueTodayOnly ? '✕ tout afficher' : 'voir →'}</span>`;
+}
+document.getElementById('dueTodayBanner').addEventListener('click', () => {
+  filterDueTodayOnly = !filterDueTodayOnly;
+  renderDueTodayBanner();
+  renderProspects();
+});
+
+/* ---------- PROSPECTION: CATEGORY STATS ---------- */
+document.getElementById('statsBtn').addEventListener('click', () => {
+  const byCategory = {};
+  prospects.forEach(p => {
+    const cat = p.category || 'Autre';
+    const st = (prospectStatus[p.id] || {}).status || 'todo';
+    if(!byCategory[cat]) byCategory[cat] = { contacted: 0, sold: 0, total: 0 };
+    byCategory[cat].total++;
+    if(st !== 'todo') byCategory[cat].contacted++;
+    if(st === 'yes') byCategory[cat].sold++;
+  });
+  const rows = Object.entries(byCategory)
+    .filter(([,v]) => v.contacted > 0)
+    .sort((a,b) => b[1].sold - a[1].sold);
+  const el = document.getElementById('statsCatList');
+  if(rows.length === 0){
+    el.innerHTML = `<div class="empty-state"><div class="em-title">Pas encore de données</div><div class="em-sub">Contacte quelques prospects pour voir apparaître les statistiques.</div></div>`;
+  } else {
+    el.innerHTML = rows.map(([cat, v]) => {
+      const pct = v.contacted > 0 ? Math.round((v.sold / v.contacted) * 100) : 0;
+      return `
+        <div class="stats-cat-row">
+          <span class="stats-cat-name">${escapeHtml(cat)}</span>
+          <span class="stats-cat-nums">${v.sold}/${v.contacted} contactés</span>
+          <span class="stats-cat-pct">${pct}%</span>
+        </div>
+      `;
+    }).join('');
+  }
+  openSheet(document.getElementById('statsSheet'));
+});
+document.getElementById('statsCloseBtn').addEventListener('click', closeSheets);
+
+/* ---------- PROSPECTION: CSV EXPORT ---------- */
+document.getElementById('exportCsvBtn').addEventListener('click', () => {
+  const STATUS_LABEL = { todo: 'À faire', yes: 'Oui', no: 'Non', later: 'À repasser' };
+  const header = ['Nom','Adresse','Catégorie','Distance (km)','Statut','Date de relance','Note'];
+  const rows = prospects.map(p => {
+    const st = prospectStatus[p.id] || {};
+    return [
+      p.name || '', p.address || '', p.category || '', p.distance != null ? p.distance : '',
+      STATUS_LABEL[st.status] || 'À faire', st.followUpDate || '', (st.note || '').replace(/[\r\n]+/g,' ')
+    ];
+  });
+  const csvEsc = v => `"${String(v).replace(/"/g,'""')}"`;
+  const csv = [header, ...rows].map(r => r.map(csvEsc).join(';')).join('\r\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'avisboost-prospects-' + todayStr() + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('CSV téléchargé');
+});
+
+/* ---------- THEME: MODE (Auto / Clair / Sombre) ---------- */
+const THEME_MODE_KEY = 'avisboost_theme_mode';
+function getThemeMode(){ try{ return localStorage.getItem(THEME_MODE_KEY) || 'auto'; }catch(e){ return 'auto'; } }
+function setThemeMode(m){ try{ localStorage.setItem(THEME_MODE_KEY, m); }catch(e){} applyAutoTheme(); }
+
+function applyAutoTheme(){
+  const mode = getThemeMode();
+  let isDark;
+  if(mode === 'dark') isDark = true;
+  else if(mode === 'light') isDark = false;
+  else { const h = new Date().getHours(); isDark = h >= 20 || h < 7; }
+  document.documentElement.classList.toggle('dark', isDark);
+  document.querySelector('meta[name="theme-color"]').setAttribute('content', isDark ? '#000000' : '#F2F2F7');
+}
+applyAutoTheme();
+setInterval(applyAutoTheme, 5 * 60 * 1000);
+
+/* ---------- THEME: ACCENT COLOR ---------- */
+const ACCENT_THEMES = [
+  { id: 'blue',    label: 'Bleu',     color: '#007AFF', colorDark: '#0062CC' },
+  { id: 'emerald', label: 'Émeraude', color: '#12B76A', colorDark: '#0E9257' },
+  { id: 'coral',   label: 'Corail',   color: '#FF6B54', colorDark: '#E5503A' },
+  { id: 'violet',  label: 'Violet',   color: '#7C5CFF', colorDark: '#6141E0' },
+  { id: 'gold',    label: 'Doré',     color: '#C9962C', colorDark: '#A97B1E' },
+  { id: 'rose',    label: 'Rose',     color: '#FF2D78', colorDark: '#DB1D63' }
+];
+const ACCENT_KEY = 'avisboost_accent';
+function getAccent(){ try{ return localStorage.getItem(ACCENT_KEY) || 'blue'; }catch(e){ return 'blue'; } }
+function setAccent(id){ try{ localStorage.setItem(ACCENT_KEY, id); }catch(e){} applyAccent(); }
+function applyAccent(){
+  const t = ACCENT_THEMES.find(x => x.id === getAccent()) || ACCENT_THEMES[0];
+  document.documentElement.style.setProperty('--sys-blue', t.color);
+  document.documentElement.style.setProperty('--sys-blue-dark', t.colorDark);
+}
+applyAccent();
+
+/* ---------- THEME SHEET ---------- */
+const THEME_MODE_OPTIONS = [
+  { value: 'auto', label: 'Auto' },
+  { value: 'light', label: 'Clair' },
+  { value: 'dark', label: 'Sombre' }
+];
+function renderThemeSheet(){
+  const modeEl = document.getElementById('themeModeChips');
+  const currentMode = getThemeMode();
+  modeEl.innerHTML = THEME_MODE_OPTIONS.map(o => `
+    <button class="chip ${currentMode === o.value ? 'active' : ''}" data-mode="${o.value}">${o.label}</button>
+  `).join('');
+  modeEl.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      setThemeMode(chip.dataset.mode);
+      renderThemeSheet();
+    });
+  });
+
+  const accentEl = document.getElementById('accentSwatches');
+  const currentAccent = getAccent();
+  accentEl.innerHTML = ACCENT_THEMES.map(t => `
+    <button class="accent-swatch ${currentAccent === t.id ? 'selected' : ''}" data-accent="${t.id}" style="background:${t.color};" title="${t.label}">
+      <span class="check">✓</span>
+    </button>
+  `).join('');
+  accentEl.querySelectorAll('.accent-swatch').forEach(sw => {
+    sw.addEventListener('click', () => {
+      setAccent(sw.dataset.accent);
+      renderThemeSheet();
+    });
+  });
+}
+document.getElementById('themeBtn').addEventListener('click', () => {
+  renderThemeSheet();
+  openSheet(document.getElementById('themeSheet'));
+});
+document.getElementById('themeCloseBtn').addEventListener('click', closeSheets);
+
 /* ---------- INIT ---------- */
+const CENTER_LAT = 45.82996, CENTER_LNG = 4.96796;
 loadCards();
 loadOrders();
+loadProspects();
+loadProspectStatus();
+renderRadiusChips();
+renderProspects();
 renderCards();
 </script>
 </body>
